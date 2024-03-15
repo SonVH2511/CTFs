@@ -1,0 +1,62 @@
+struct program_t {
+    using R = std::array<uint32_t, 15>;
+
+    template<insn_t Insn>
+    static constexpr void execute_one(R &regs) {
+        if constexpr (Insn.opcode == 0) {
+            regs[Insn.op0] = Flag.at(Insn.op1);
+        } else if constexpr (Insn.opcode == 1) {
+            regs[Insn.op0] = Insn.op1;
+        } else if constexpr (Insn.opcode == 2) {
+            regs[Insn.op0] ^= Insn.op1;
+        } else if constexpr (Insn.opcode == 3) {
+            regs[Insn.op0] ^= regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 4) {
+            regs[Insn.op0] |= Insn.op1;
+        } else if constexpr (Insn.opcode == 5) {
+            regs[Insn.op0] |= regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 6) {
+            regs[Insn.op0] &= Insn.op1;
+        } else if constexpr (Insn.opcode == 7) {
+            regs[Insn.op0] &= regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 8) {
+            regs[Insn.op0] += Insn.op1;
+        } else if constexpr (Insn.opcode == 9) {
+            regs[Insn.op0] += regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 10) {
+            regs[Insn.op0] -= Insn.op1;
+        } else if constexpr (Insn.opcode == 11) {
+            regs[Insn.op0] -= regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 12) {
+            regs[Insn.op0] *= Insn.op1;
+        } else if constexpr (Insn.opcode == 13) {
+            regs[Insn.op0] *= regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 14) {
+            __noop;
+        } else if constexpr (Insn.opcode == 15) {
+            __noop;
+            __noop;
+        } else if constexpr (Insn.opcode == 16) {
+            regs[Insn.op0] = rotr(regs[Insn.op0], Insn.op1);
+        } else if constexpr (Insn.opcode == 17) {
+            regs[Insn.op0] = rotr(regs[Insn.op0], regs[Insn.op1]);
+        } else if constexpr (Insn.opcode == 18) {
+            regs[Insn.op0] = rotl(regs[Insn.op0], Insn.op1);
+        } else if constexpr (Insn.opcode == 19) {
+            regs[Insn.op0] = rotl(regs[Insn.op0], regs[Insn.op1]);
+        } else if constexpr (Insn.opcode == 20) {
+            regs[Insn.op0] = regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 21) {
+            regs[Insn.op0] = 0;
+        } else if constexpr (Insn.opcode == 22) {
+            regs[Insn.op0] >>= Insn.op1;
+        } else if constexpr (Insn.opcode == 23) {
+            regs[Insn.op0] >>= regs[Insn.op1];
+        } else if constexpr (Insn.opcode == 24) {
+            regs[Insn.op0] <<= Insn.op1;
+        } else if constexpr (Insn.opcode == 25) {
+            regs[Insn.op0] <<= regs[Insn.op1];
+        } else {
+            static_assert(always_false_insn_v<Insn>);
+        }
+    }

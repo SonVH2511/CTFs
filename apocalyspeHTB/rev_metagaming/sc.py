@@ -1,0 +1,10 @@
+
+print(hex(0x0e6c7852 ^ 0x3ee88722))  # get Regs[1]
+print(hex(0x3084ff70 ^ 0xecbdbe2))  # get Regs[2]
+print(hex(0x3e4f2492 ^ 0x60b843c4))  # get Regs[3]
+print(hex(0x5ef76756 ^ 0x5da67c7))  # get Regs[4]
+print(hex(0x5b2d0091 ^ 0x171ef1e9))  # get Regs[5]
+print(hex(0x4c33f178 ^ 0x52d5b3f7))  # get Regs[6]
+print(hex(0x1ee6428f ^ 0x3ae718c0))  # get Regs[7]
+print(hex(0x24015a4f ^ 0x8b4aacc2))  # get Regs[8]
+print(hex(0xaf4bf68d ^ 0xe5cf78dd))  # get Regs[9]
