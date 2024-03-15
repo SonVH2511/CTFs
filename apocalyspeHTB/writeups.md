@@ -120,7 +120,7 @@ struct insn_t
 
 ![alt text](_IMG/image-9.png)
 
-- Quan sát cẩn ở case `opcode == 0`, đây là case lấy giá trị từ `flag[op1]` vào `regs[op0]`. Ý tưởng của mình là tìm các case `insn_t(0, 0->5, op1)` bởi ta biết được format flag là `HTB{}`.
+- Quan sát cẩn ở case `opcode == 0`, đây là case lấy giá trị từ `flag[op1]` vào `regs[op0]`. Ý tưởng của mình là tìm các case `insn_t(0, 0->3, op1)` bởi ta biết được format flag là `HTB{}` nên hoàn toàn có thể giải được `Regs[0]`.
 
 ![alt text](_IMG/image-8.png)
 
@@ -170,18 +170,19 @@ Flag[3] = (int)'{';
 
 Regs[0] = 0;
 
+// nhặt kí tự thứ 0 của flag rồi ghép lại
 Regs[14] = Flag[0];
 Regs[14] <<= 0;
 Regs[0] |= Regs[14];
-
+// nhặt kí tự thứ 1 của flag rồi ghép lại
 Regs[14] = Flag[1];
 Regs[14] <<= 8;
 Regs[0] |= Regs[14];
-
+// nhặt kí tự thứ 2 của flag rồi ghép lại
 Regs[14] = Flag[2];
 Regs[14] <<= 16;
 Regs[0] |= Regs[14];
-
+// nhặt kí tự thứ 3 của flag rồi ghép lại
 Regs[14] = Flag[3];
 Regs[14] <<= 24;
 Regs[0] |= Regs[14];
