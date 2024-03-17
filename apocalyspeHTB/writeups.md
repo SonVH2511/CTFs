@@ -1,6 +1,40 @@
 ## SubTask/apocalyspeHTB
 
-### Crushing
+### misc_cubicle_riddle
+
+- Chương trình thực hiện gọi hàm với nội dung chạy opcode được ghép bởi `self.co_code_start = b"d\x01}\x01d\x02}\x02"`, `self.co_code_end = b"|\x01|\x02f\x02S\x00"` và ở giữa là input của ta. Nhiệm vụ là truyền input sao cho khớp và trả về kết quả chương trình mong muốn.
+
+![alt text](_IMG/image-34.png)
+
+- Ở đây chương trình yêu cầu ta nhặt ra giá trị lớn nhất và nhỏ nhất của mảng được random, tuy không thể kiểm soát được `randInt()`, thứ ta truyền vào là opcode để duyệt và nhặt ra min và max.
+
+![alt text](_IMG/image-35.png)
+
+```python
+def _ans(num_list, min, max, num):
+    min = 1000
+    max = -1000
+    for num in range(0, 10, 1):
+        if min > num_list[num]:
+            min = num
+        if max < num_list[num]:
+            max = num
+    return (min, max)
+
+answer_func = create_answer_func()
+code_obj = answer_func.__code__
+print(code_obj.co_code)
+```
+
+- Thực thi chương trình khi đã có đoạn opcode đầu và đuôi khớp với `co_code_start` và `co_code_end`. ta nhặt đoạn ở giữa ra rồi gửi tới sever.
+
+![alt text](_IMG/image-36.png)
+
+```
+flag: HTB{r1ddle_m3_th1s_r1ddle_m3_th4t}
+```
+
+### rev_Crushing
 
 ![alt text](_IMG/image.png)
 
@@ -99,7 +133,9 @@ Organizer 1: Absolutely. The thrill of the unknown is what keeps them coming bac
 Flag: HTB{4_v3ry_b4d_compr3ss1on_sch3m3}
 ```
 
-### Metagaming
+### rev_Quick_scan
+
+### rev_Metagaming
 
 - Chall này cấp cho ta source `C++`. Chương trình không thể thực thi nên mình đọc chay.
 
@@ -224,7 +260,203 @@ Vậy ta có thể dựa vào nó mà bruteForce. 10 biến, mỗi biến nhặt
 flag: HTB{m4n_1_l0v4_cXX_TeMpl4t35_9fb60c17b0}
 ```
 
-###
+### rev_QuickScan
+
+- Truy cập sever, Chall cấp ta một mã `base64`, giải ra một file ELF với nội dung cơ bản là như nhau ở mọi lần truy vấn.
+
+  ![alt text](_IMG/image-32.png)
+
+- Với nội dung đoạn đầu luôn là xử lý chuỗi số bên dưới, ta xây dựng chương trình getdata từ sever và giải mã rồi gửi trả.
+
+  ![alt text](_IMG/image-33.png)
+
+```python
+from pwn import *
+import base64
+
+
+def from_bytes(b):
+    num = int.from_bytes(b, byteorder='little')
+    if num >= 2**(len(b)*8 - 1):
+        num -= 2**(len(b)*8)
+    return num
+
+
+def find_sequence_and_extract_bytes(byte_sequence):
+    sequence = bytes([0x48, 0x83, 0xEC, 0x18, 0x48, 0x8D, 0x35])
+    data = byte_sequence
+    index = data.find(sequence)
+    four_bytes = data[index + len(sequence): index + len(sequence) + 4]
+    b = from_bytes(four_bytes)
+    s = index + 4 + 7 + b
+    extracted_bytes = data[s: s + 24]
+
+    return extracted_bytes.hex()
+
+
+r = remote('94.237.53.82', 41821)
+
+first_message = r.recvuntil("Bytes? ").decode()  # truy vấn đầu tiên
+print(first_message)
+
+first_answer = first_message.split("Expected bytes: ")[1].split("\n")[0]
+r.sendline(first_answer)
+
+solved = 0
+
+while True:
+
+    try:
+        second_message = r.recvuntil("Bytes? ").decode()
+    except Exception as e:
+        print("solve: ", solved)
+        print("An error occurred: ", str(e))
+        print("Received so far: ", r.recv().decode())
+
+    print(second_message)
+
+    elf_base64 = second_message.split("ELF:  ")[1].split("\n")[0]
+    elf = base64.b64decode(elf_base64)
+    answer = find_sequence_and_extract_bytes(elf)
+
+    print(answer)
+    r.sendline(answer)
+
+flag = r.recv().decode()
+print(flag)
+r.close()
+
+# HTB{y0u_4n4lyz3d_th3_p4tt3ns!}
+```
+
+![alt text](_IMG/image-31.png)
+
+### rev_Boxcutter
+
+- Chương trình khá đơn giản, thực hiện phép `xor` các kí tự trong mảng `File[]` với `0x37`. Sau đó thực hiện mở `File`.
+
+![alt text](_IMG/image-14.png)
+
+- Nhặt data ra và for, ta thu được `flag`.
+
+```python
+file1 = [0x54, 0x03, 0x45, 0x43, 0x4C, 0x75, 0x63, 0x7F][::-1]
+file2 = [0x68, 0x04, 0x5F, 0x43, 0x68, 0x50, 0x59, 0x06][::-1]
+file3 = [0x37, 0x4A, 0x02, 0x5B, 0x5B, 0x03, 0x54, 0x68][::-1]
+for i in file1:
+    print(chr(i ^ 0x37), end="")
+for i in file2:
+    print(chr(i ^ 0x37), end="")
+for i in file3:
+    print(chr(i ^ 0x37), end="")
+```
+
+```
+flag: HTB{tr4c1ng_th3__c4ll5}
+```
+
+### rev_Lootstash
+
+- Chương trình thực hiện in random một trong những string nằm ở một dải cụ thể trong chương trình. Vậy mình chỉ cần search theo format flag ở trong chương trình là được.
+
+![alt text](_IMG/image-12.png)
+
+```
+flag: HTB{n33dl3_1n_a_l00t_stack}
+```
+
+### rev_Packedaway
+
+- Chạy chương trình mình thấy trong khá nham nhở, sử dụng `die` để kiểm tra, thông báo rằng chương trình được pack bằng `upx` `Packer: UPX(4.22)[NRV2B_LE32,best]`. Mọi người có thể lấy unpack tool ở ![đây](rev_packedaway/upx-4.2.2-win64.zip).
+
+![alt text](_IMG/image-15.png)
+
+- Chạy chương trình đã unpack, flag có thể search ra ngay trong mục `string`. Lý do mình kiếm ở mục `string` là do lúc detect file thực thi chưa được unpack mình đã thấy một và mẩu flag chưa hoàn thiện.
+
+![alt text](_IMG/image-16.png)
+
+```
+flag: HTB{unp4ck3d_th3_s3cr3t_0f_th3_p455w0rd}
+```
+
+### rev_flecksofgold
+
+![alt text](_IMG/image-17.png)
+
+- Chall này cấp cho ta một chương trình khá dài, không có input. Từ mô tả của đề, cùng với việc quan sát chương trình, mình tóm gọn nội dung bài như sau:
+
+- Các object được tạo ra trong bài gồm có `Person` và `FlagPart`.
+  - `Person` có các thuộc tính quan trọng là `Position` và `CanMove`, hành động là `run`.
+  - `FlagPart` có thuộc tính quan trọng là `Position`.
+- Chương trình thực hiện khởi tạo các `FlagPart` và quăng chúng trong bản đồ, thực hiện tạo ra các thực thể `Person` gồm 20 phần tử là các tên riêng.
+
+  ![alt text](_IMG/image-18.png)
+
+- Các cá nhân được tạo ra sẽ di chuyển trong map cho tới khi nào vị trí của `Person` trùng với vị trí của `FlagPart` thì sẽ trả về chuỗi `flag` và in ra. Nếu ta trace ngược lại sẽ thấy `flag` là chuỗi `?????????????????????????????`. Ngay gần mảng `names`
+
+  ![alt text](_IMG/image-19.png)
+  ![alt text](_IMG/image-20.png)
+
+- Vậy ta có 2 hướng đi để giải Chall này, một là trace flag thông qua `FlagPart`, hai là để `Person` mang `flag` về.
+
+- Ở cách đầu tiên. Mình thấy `FlagPart` xuất hiện ở 2 vùng, tuy nhiên vùng trên là để khởi tạo, mình sẽ trace ở vùng dưới.
+
+  ![alt text](_IMG/image-21.png)
+
+- Suy nghĩ đơn giản rằng sau công đoạn khởi tạo, check thành phần thì `FlagPart` sẽ được gán giá trị, cụ thể ở đây là các mẩu `flag`. `FlagPart` được sinh ra trong vòng while kết thúc tại dòng 505, việc khởi tạo `FlagPart` hoàn thiện sau khi gán `ID` ở trên đó, nó được `v41` trỏ tới .
+
+  ![alt text](_IMG/image-22.png)
+
+- Sau đó là công đoạn xử lý `FlagPart` được tạo ra, ta thấy có 2 dòng lệnh trỏ hàm `ecs_get_mut_modified_id()` tới `*v35`. Tham số của hàm này gồm `v41` và các `const` nên mình trace theo `v35` thử.
+
+  ![alt text](_IMG/image-23.png)
+
+- v35 được gán với 1 const trước khi khởi tạo `FlagPart`, ta thấy const `qword_558EBD99E7A8` này được gọi ra 2 lần, tìm đến vị trí còn lại nó được gọi ra và thấy biến này được gán bởi các `const`.
+
+  ![alt text](_IMG/image-24.png)
+  ![alt text](_IMG/image-25.png)
+
+- Rõ nguồn gốc của các giá trị trên, quay trở lại với `v35`. Ta thấy `v35` trỏ tới một dải giá trị gồm các kí tự dễ nhận biết. Có đủ format của flag.
+
+  ![alt text](_IMG/image-26.png)
+
+- Mỗi cụm gồm 2 thành phần vừa đủ cho size của `FlagPart` là 2 byte, đồng thời xem kĩ một chút ta thấy trên kí tự `H` là 0 và kí tự `T` là 1. Mạnh dạn kết luận rằng từng cặp đôi một là vị trí và kí tự tại vị trí đó. Nhặt ra rồi viết đoạn script nhỏ.
+
+```python
+data = [0x15, 0x30, 0x1B, 0x72, 0x10, 0x72, 0x13, 0x5F, 0x02, 0x42,
+        0x18, 0x74, 0x04, 0x62, 0x0E, 0x70, 0x06, 0x31, 0x16, 0x67,
+        0x00, 0x48, 0x07, 0x6E, 0x0F, 0x34, 0x09, 0x5F, 0x01, 0x54,
+        0x0B, 0x68, 0x05, 0x72, 0x08, 0x67, 0x14, 0x74, 0x0D, 0x5F,
+        0x0C, 0x33, 0x1C, 0x7D, 0x11, 0x74, 0x1A, 0x33, 0x19, 0x68,
+        0x0A, 0x74, 0x12, 0x35, 0x17, 0x33, 0x03, 0x7B]
+
+flag = [0]*100
+output = ''
+
+for i in range(len(data)):
+    if i % 2 == 0:
+        flag[data[i]] = data[i+1]
+
+for i in flag:
+    output += chr(i)
+
+print(output)
+# HTB{br1ng_th3_p4rt5_t0g3th3r}
+```
+
+- Ở cách 2, sau khi các mảnh flag được quăng đi, ta nhảy được nhảy tới `LABEL96` đây là phần khởi tạo các `Person` để đi tìm `flag`.
+
+![alt text](_IMG/image-27.png)
+
+- Tuy nhiên vòng lặp khởi tạo này lại cản trở ta nhảy tới bước di chuyển của `Person`, mình quyểt định force jump ở đây sau khi tạo ra được một `Person` đầu tiên là `Armanix`.
+
+![alt text](_IMG/image-28.png)
+
+![alt text](_IMG/image-29.png)
+
+- Giờ thì `f9` và đợi `Armanix` mang flag về thôi^^.
+
+![alt text](_IMG/image-30.png)
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
