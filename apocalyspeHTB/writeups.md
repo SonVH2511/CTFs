@@ -133,8 +133,6 @@ Organizer 1: Absolutely. The thrill of the unknown is what keeps them coming bac
 Flag: HTB{4_v3ry_b4d_compr3ss1on_sch3m3}
 ```
 
-### rev_Quick_scan
-
 ### rev_Metagaming
 
 - Chall này cấp cho ta source `C++`. Chương trình không thể thực thi nên mình đọc chay.
