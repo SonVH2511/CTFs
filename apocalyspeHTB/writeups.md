@@ -1,4 +1,4 @@
-## SubTask/apocalyspeHTB
+## CTFs/apocalyspeHTB
 
 ### misc_cubicle_riddle
 
