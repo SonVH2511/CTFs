@@ -286,7 +286,7 @@ def find_sequence_and_extract_bytes(byte_sequence):
     index = data.find(sequence)
     four_bytes = data[index + len(sequence): index + len(sequence) + 4]
     b = from_bytes(four_bytes)
-    s = index + 4 + 7 + b
+    s = index + 4 + 7 + b # cộng với địa chỉ lea và thêm độ dài của lea = 7
     extracted_bytes = data[s: s + 24]
 
     return extracted_bytes.hex()
