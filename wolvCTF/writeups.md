@@ -478,7 +478,7 @@ flag = ['w', 'c', 't', 'f', '{', 'p', '', '', '', '', '', '', '', '', '', '', ''
 
 i = 6
 default_len = 926
-flag_comp = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=<>,.?/{}[]\|~:;"\''
+flag_comp = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=<>,./{}[]\|~:;?"\''
 while flag[i-1] != '}':
     for j in flag_comp:
         flag[i] = j
@@ -501,6 +501,8 @@ for j in flag_comp:
 ![alt text](_IMG/image-22.png)
 
 - Các bạn tham khảo source của mình tại đây: [befunge.py](Befudged_up/befunge.py), [runner.py](Befudged_up/runner.py),
+
+- Note: Các bạn chỉnh script trên cho đoạn flag_comp có một kí tự không xuất hiện nhiều lên đầu bởi nếu chữ `a` có xuất hiện trong flag thì chương trình này sẽ lỗi bởi thiếu lệnh check pre-char, cũng may mà flag không gồm kí tự `a`^^.
 
 ```
 flag: wctf{pr30ccup13d_w1+h_wh3+h3r_0r_n0t_1_c0uld}
