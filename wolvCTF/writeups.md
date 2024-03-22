@@ -312,7 +312,7 @@ flag: wctf{your-d3sc3nt-into-gamedev-beg1ns}
 
   ![alt text](_IMG/image-16.png)
 
-- Khi mình thử in ra các giá trị trong từng truy vấn, mình nhận thấy một điểm khá đáng chú ý. Rằng ở `case 'g'`, tùy thuộc vào độ chính xác của `flag` mà lượng output sẽ có độ chênh lệch.
+- Khi mình thử in ra các giá trị trong từng truy vấn, mình nhận thấy một điểm khá đáng chú ý. Rằng ở `case 'g'`, tùy thuộc vào độ chính xác của `flag` mà lượng output sẽ có độ chênh lệch. Nói một chút về `case 'g'`, truy vấn này thực hiện đẩy giá trị tại `GRIG[x][y]` vào `stack` để thực thi chương trình hoặc tương tự, mọi người có thể in ra GRID sau khi được khởi tạo thì sẽ rõ thứ được push vào `stack` là gì, chúng hoàn toàn là nội dung file truy vấn `prog.befunge` ta được cấp, phân thành mảng từng dòng một. Mình có suy đoán rằng đây là một trong các truy vấn điều khiển luồng chương trình nên in ra giá trị của nó xem thử.
 
   ![alt text](_IMG/image-17.png)
 
@@ -509,9 +509,6 @@ flag: wctf{pr30ccup13d_w1+h_wh3+h3r_0r_n0t_1_c0uld}
 ## Mong WRITEUP này giúp ích cho các bạn!
 
 ```
-
 from KMA
 Author: 13r_ə_Rɪst
-Email: sonvha2k23@cvp.vn
-
 ```
