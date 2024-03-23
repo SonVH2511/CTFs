@@ -514,20 +514,20 @@ flag: wctf{pr30ccup13d_w1+h_wh3+h3r_0r_n0t_1_c0uld}
 
 - Đầu tiên chương trình yêu cầu nhập flag, và check format `wctf{}`. Nội dung flag sẽ được mang đi xor với đống `const` có sẵn.
 
-  ![alt text](image-23.png)
+  ![alt text](_IMG/image-23.png)
 
 - Tiếp đến, phần nội dung của flag được xử lý tạo thành các truy vấn thực hiện quá trình di chuyển trong `maze`, cho tới khi đạt được điều kiện `des_pos == 0x260000005ALL && step_cnt == 223`, tức là vị trí hiện tại trùng với vị trí `{0x5a, 0x26}`, và có số bước di chuyển tối đa là 223.
 
-![alt text](image-24.png)
+![alt text](_IMG/image-24.png)
 
 - Đó là sơ bộ nội dung chương trình, đi vào phân tích sâu hơn. Trước tiên, khi quan sát ma trận được cấp, ta thấy một vị trí được đánh dấu `*` duy nhất chính là điểm xuất phát, ta có thể thấy rõ hơn khi debug động nếu xem biến `des_pos` trước khi chương trình thực hiện xử lí các bước nhảy. Vị trí xuất phát nằm ở ô `{0x27, 0x26}`.(lưu ý rằng tọa độ trong WU sẽ viết ngược lại so với Chall vì mình quen xử lý giá trị [x][y] hơn là [y][x] ^^).
 
-  ![alt text](image-27.png)
-  ![alt text](image-25.png)
+  ![alt text](_IMG/image-27.png)
+  ![alt text](_IMG/image-25.png)
 
 - Tiếp tới là nội dung flag, một mẩu flag được sử dụng 4 lần với một phép toán để tách thành giá trị 0,1,2,3 tương ứng với 4 phương thức di chuyển xuống, lên, trái, phải. Mọi người có thể thấy được phương hướng di chuyển của chương trình trong quá trình debug bằng cách vét tham số đầu vào với phép toán có sẵn ở trên.
 
-  ![alt text](image-26.png)
+  ![alt text](_IMG/image-26.png)
 
 - Giờ mình sẽ phân tích cách di chuyển của chương trình. Mình thử nhập giá trị đầu vào là kí tự `C` để cho ra bước di đầu tiên là sang phải bởi dễ dàng quan sát tại ma trận được cấp sẵn rằng đó là nước đi hợp lệ duy nhất.
 
@@ -541,15 +541,15 @@ for i in flag_comp:
 
 - Với nước đi đầu tiên là sang phải, mình dự tính sau khi xử lý, `des_pos` sẽ bằng `{0x27, 0x27}` và `step_cnt = 1`, tức là dịch phải 1 đơn vị và số nước đi tối ưu bằng 1. Tuy nhiên kết quả đầu ra lại khác với mong đợi:
 
-  ![alt text](image-28.png)
+  ![alt text](_IMG/image-28.png)
 
 - `des_pos` sau khi xử lý lại là `{0x27,0x28}`, tức là đi được thêm một bước so với dự đoán, số nước di chuyển cũng được ghi lại đầy đủ là 2.
 
-  ![alt text](image-29.png)
+  ![alt text](_IMG/image-29.png)
 
 - Ảnh mình đánh dấu 1, 2 dưới đây là các bước di chuyển được trong lần truy vấn đầu tiên. Tới đây, mình suy đoán rằng có thể chương trình sẽ di chuyển tới đoạn rẽ và đánh dấu liên tục, kiểm chứng bằng cách cho chạy tiếp các nước di chuyển tiếp theo của kí tự `C` ~ `3, 0, 3, 1`.
 
-![alt text](image-30.png)
+![alt text](_IMG/image-30.png)
 
 - Ta thu được các vị trí sau 4 lần xủ lí của kí tự `C` như dưới.
 
@@ -562,15 +562,15 @@ for i in flag_comp:
 
 - Chúng tương ứng với các vị trí mình đánh dấu `X` trong ảnh.
 
-  ![alt text](image-31.png)
+  ![alt text](_IMG/image-31.png)
 
 - Vậy nhận định ở trên là đúng, đó là về mặt phân tích. Nếu quan sát kĩ hơn thì ngay trong chương trình có hàm kiểm tra rồi đệ quy để duyệt tới vị trí cuối của nút rẽ.
 
-  ![alt text](image-32.png)
+  ![alt text](_IMG/image-32.png)
 
 - Viết ![chương trình](rev_Maize/sc.cpp) duyệt BFS loang đánh dấu nhặt ra bộ 4 lần rẽ một để ghép lại thành bộ để vét cạn kí tự xem có xuất hiện các cụm có nghĩa không.
 
-![alt text](image-36.png)
+![alt text](_IMG/image-36.png)
 
 - `output` chương trình tương tự đường đi của ảnh tham khảo bên trên.
 
@@ -600,13 +600,13 @@ for move in m1:
                 break
 ```
 
-![alt text](image-33.png)
+![alt text](_IMG/image-33.png)
 
 - Trông rõ ràng là ta đang đi đúng hướng^^.
 
 - Vấn đề cuối cùng là làm sao chuyển mặt `maze` đây? Cái này thì ta nhặt hàm này gắn vào chương trình duyệt của mình là được.
 
-  ![alt text](image-34.png)
+  ![alt text](_IMG/image-34.png)
 
 - Nhưng tới đây vẫn chưa xong@@. Các mặt của maze có trình tự đọc không giống nhau, cụ thể hơn là trong mặt phẳng thì không được. Giống như một khối rubik khi giải mặt nào thì cần nhìn trực diện mặt đó vậy, công thức di chuyển ở trên được áp dụng cho mặt xuất phát. Lật sang mặt thứ 2, quy tắc không có thay đổi bởi vẫn cùng chiều, mặt thứ 2 sang 3 phải xoay 90 độ, mặt thứ 3 sang 4 lật có công thức di chuyển ngược lại so với tương quan của mặt đầu và mặt cuối cùng đối xứng với mặt xuất phát nên vẫn giữ quy tắc đầu tiên. Khá khó mô tả bằng lời nhưng sẽ dễ nhận ra trong quá trình debug thôi!
 
@@ -723,7 +723,7 @@ for i in flag_comp:
 print(flag)
 ```
 
-![alt text](image-35.png)
+![alt text](_IMG/image-35.png)
 
 ```
 flag: wctf{Cub3_5pUn_f746a6c536}
