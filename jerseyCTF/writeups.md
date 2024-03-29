@@ -76,7 +76,7 @@ for i in key:
 
 ![alt text](_IMG/image-9.png)
 
-- Đã thu được ciphertext, key, iv. Giờ tới bước giải mã, dưới đây là bộ khung giải mã AES mình xin được chỉ việc lắp data vào thôi^^.
+- Đã thu được ciphertext, key, iv. Giờ tới bước giải mã, dưới đây là bộ khung giải mã AES mình xin được chỉ việc lắp data vào thôi^^. Không nên tin cybherchef lắm vì lần này mình dùng cyberchef để giải mà không được nên mới cần đến khung decrypt viết tay.
 
 ```python
 #pip install pycryptodome
