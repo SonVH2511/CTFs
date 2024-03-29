@@ -79,6 +79,7 @@ for i in key:
 - Đã thu được ciphertext, key, iv. Giờ tới bước giải mã, dưới đây là bộ khung giải mã AES mình xin được chỉ việc lắp data vào thôi^^.
 
 ```python
+#pip install pycryptodome
 from Crypto.Util.number import *
 from Crypto.Cipher import AES
 
