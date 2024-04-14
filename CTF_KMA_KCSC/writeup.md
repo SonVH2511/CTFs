@@ -365,7 +365,7 @@ flag: KMACTF{A_littl3_tricky_chall3ng3}
 
 - Vấn đề phát sinh ở đây, chương trình không có `checker` hay thứ gì tương tự để ta giới hạn `input_key`. Điều này khiến việc vét cạn là không thể, bởi thậm chí còn không có độ dài của `input_key` để mà vét. Mình xem có `hint` như sau.
 
-![alt text](Hint.png)
+![alt text](_IMG/Hint.png)
 
 - Hint này làm mình chú ý tới đoạn gán data ở đầu chương trình. Trước khâu gán giá trị vào `data`, có một đoạn giá trị cũng được truyền vào một dải data nào đó. Với thứ duy nhất mình thiếu hiện tại là `input_key`, mình thử thay nó vào vị trí của `input_key` và thu được `encrypted_data` là flag.
 
