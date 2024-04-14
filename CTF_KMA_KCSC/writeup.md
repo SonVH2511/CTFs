@@ -8,7 +8,7 @@
 
 - Một chút tư duy sơ bộ khi thấy những thứ được cấp, ta có thể hình dung rằng file `flag.bmp.encrypted` là file được mã hóa bởi chương trình `encryptor`.
 
-![alt text](image.png)
+![alt text](_IMG/image.png)
 
 - Quăng vào `IDA` và làm đẹp mã giả, ta có thể tóm tắt nội dung chương trình với một số công đoạn.
 
@@ -16,17 +16,17 @@
 
 - Nói về `key`, với key sẽ được xử lý thành dạng 4byte hex, và được sử dụng như một mảng 4 phần tử 1 byte để mã hóa. ví dụ như input key của mình là `9999` thì sẽ được convert thành `[0f, 27, 00, 00]`,
 
-![alt text](image-1.png)
+![alt text](_IMG/image-1.png)
 
 - File ảnh `.bmp` được mã hóa `RC4` với `key` sẽ được thêm đuôi `.encrypted` như đề bài đã cấp. Vậy nhiệm vụ của mình sẽ là khôi phục lại file `.bmp` ban đầu.
 
-![alt text](image-2.png)
+![alt text](_IMG/image-2.png)
 
 - RC4 là dạng mã hóa đối xứng. Với một `key`, ta có thể `decrypt` file bị mã hóa RC4 bằng cách truyền lại vào hàm `RC4` này.
 
 - Vậy thứ ta cần vét cạn là `key`, mình sẽ duyệt từ `0x00000000` đến `0xffffffff` tức là từ 0 đến `MAX_INT`. Về phần file gốc `.bmp` ta sẽ nhận dạng nó bằng cách kiểm tra `HEADER` file là `BM`, nếu đúng định dạng thì ta sẽ break và truyền nội dung vào một file khác là hoàn thành việc khôi phục.
 
-![alt text](image-3.png)
+![alt text](_IMG/image-3.png)
 
 - Dưới đây là chương trình mình xây dựng để vét `key`.
 
@@ -93,9 +93,9 @@ flag: KMACTF{th3_k3y_is_t00_w3ak}
 
 - Phân tích sơ bộ chall này. Mình `xref` dựa theo các string xuất hiện ở chương trình thực thi để tìm tới hàm xử lý.
 
-![alt text](image-19.png)
+![alt text](_IMG/image-19.png)
 
-![alt text](image-20.png)
+![alt text](_IMG/image-20.png)
 
 ```C++
 int __cdecl solve(int a1, const char **a2)
@@ -179,20 +179,20 @@ int __cdecl solve(int a1, const char **a2)
 
 - Tiến hành phân tích `TLS_call_back()`. Luồng chương trình này thực hiện check debugger, nếu ta debug thì chương trình sẽ nhảy tới khối lệnh xử lý bên trong, ta thực hiện bypass để nhảy vào.
 
-![alt text](image-21.png)
+![alt text](_IMG/image-21.png)
 
 - Sau đoạn tính toán ở trên, ta thấy biến `lpAddress` trỏ tới địa chỉ của hàm `ntdll_strcmp` được tái định nghĩa trong hàm xử lý chính thay vì gọi trực tiếp WinAPI `strcmp` bình thường.
 
-![alt text](image-22.png)
-![alt text](image-23.png)
+![alt text](_IMG/image-22.png)
+![alt text](_IMG/image-23.png)
 
 - Tới đây thì mình cũng hình dung ra một chút, ở khúc dưới đây chương trình thực hiện so sánh không phải `strcmp` giữa `key` và `const` string mà thực chất là truyền chúng vào hàm kiểm tra được ghi đè lên trong luồng `TLS_call_back`.
 
-![alt text](image-24.png)
+![alt text](_IMG/image-24.png)
 
 - Chuyển hướng tới kiểm tra hàm này.
 
-![alt text](image-25.png)
+![alt text](_IMG/image-25.png)
 
 ```cpp
 int __stdcall sub_4015D0(const void *a1, const char *a2)
@@ -253,15 +253,15 @@ int __stdcall sub_4015D0(const void *a1, const char *a2)
 
 - Một vấn đề nhỏ xuất hiện ở đây, mình thấy biến này xor với `IsDebuggerPresent()` trước khi xor với `key`, mình cho rằng nó phải là 0 bởi Nếu là 1 thì đã hỏng từ khâu kiểm tra ở ngoài.
 
-  ![alt text](image-26.png)
+  ![alt text](_IMG/image-26.png)
 
 - Nhưng thực ra chương trình, chỉ nhảy vào trong khi chương trình đang bị debug :v. Hơi ngược, và v7 = 1 ^ 0xAA = 0xAB.
 
-  ![alt text](image-27.png)
+  ![alt text](_IMG/image-27.png)
 
 - Cuối cùng, Chương trình thực hiện decrypt cipher có sẵn với `key` trả ra `true` ở hàm trên.
 
-![alt text](image-28.png)
+![alt text](_IMG/image-28.png)
 
 - Dưới đây là chương trình mà mình dựng lại dựa trên luồng chuẩn đã phân tích ở trên.
 
@@ -345,23 +345,23 @@ flag: KMACTF{A_littl3_tricky_chall3ng3}
 
 - Tiếp cận với chall này, những dữ liệu mình thu được gồm `data[]` được khởi tạo từ trước và dùng `input_key` mà mình nhập vào để thực hiện một vài phép toán với nó.
 
-![alt text](image-4.png)
+![alt text](_IMG/image-4.png)
 
 - Tiến tới `encryptor()`, Mình thấy một thứ khá tương đồng với các chall trước.
 
-![alt text](image-5.png)
+![alt text](_IMG/image-5.png)
 
 - Ngó thử hàm `init_map()` thì thấy đúng là trong vừa lạ vừa quen, khá giống với `RC4` nhưng không phải. `Map` được sinh ra từ key chỉ có độ lớn 128(`RC4` là 256).
 
-![alt text](image-6.png)
+![alt text](_IMG/image-6.png)
 
 - Phần `encrypt()` dựa vào Map được khởi tạo thông qua `input_key` cũng na ná `RC4` thực hiện việc đảo vị trí dựa trên Map. Mình nghĩ ràng một chương trình mã hóa giống RC4 thế này chắc có thể tra được trên mạng, tuy vậy mình có search thử RC2(vì độ lớn map bằng một nửa RC4 :v) nhưng không có kết quả.
 
-![alt text](image-7.png)
+![alt text](_IMG/image-7.png)
 
 - Dù vậy mình vẫn thử dựng lại để thử xem đây có phải mã hóa đối xứng không. Vầ đúng là chương trình mã hóa đối xứng. Với data chương trình cấp sẵn và `input_key = [1,2,3,4,5]`, mình lấy output truyền ngược lại và ra `data[]` ban đầu.
 
-![alt text](image-8.png)
+![alt text](_IMG/image-8.png)
 
 - Vấn đề phát sinh ở đây, chương trình không có `checker` hay thứ gì tương tự để ta giới hạn `input_key`. Điều này khiến việc vét cạn là không thể, bởi thậm chí còn không có độ dài của `input_key` để mà vét. Mình xem có `hint` như sau.
 
@@ -369,7 +369,7 @@ flag: KMACTF{A_littl3_tricky_chall3ng3}
 
 - Hint này làm mình chú ý tới đoạn gán data ở đầu chương trình. Trước khâu gán giá trị vào `data`, có một đoạn giá trị cũng được truyền vào một dải data nào đó. Với thứ duy nhất mình thiếu hiện tại là `input_key`, mình thử thay nó vào vị trí của `input_key` và thu được `encrypted_data` là flag.
 
-![alt text](image-9.png)
+![alt text](_IMG/image-9.png)
 
 ```python
 data = [0x22, 0x70, 0x6A, 0x0C, 0x58, 0x3F, 0x05, 0x08, 0x74, 0x3A,
@@ -430,19 +430,19 @@ flag: KMA{haycuvotuvalacquanlenemoichilakhongyeuthuongthoisaonuocmatphairoi}
 
 - Một chút khái quát về chall này, đây là một chương trình được xây dựng khá cơ bản, gồm các khâu `get_input()`, `encrypt()`, `check()`.
 
-![alt text](image-10.png)
+![alt text](_IMG/image-10.png)
 
 - Thứ khiến chall này độc đáo là cách gọi ra những chức năng này. Dưới đây là một phần của `to_Encrypt()`. Chương trình không thực hiện gọi trực tiếp chúng ra mà thực hiện rất nhiều các phép toán để sinh ra địa chỉ của hàm này. Rồi ép kiểu và `call` nó.
 
-![alt text](image-11.png)
+![alt text](_IMG/image-11.png)
 
 - Tuy trông khá độc lạ, việc làm rối chương trình lại không phải thứ khiến chall này trở nên khó khăn, bởi các hàm này đều là `const`, bởi đối số chỉ được dùng ở một vị trí duy nhất là làm input của hàm được tính toán ra. Mọi người có thể tự kiểm tra bằng `xref`. Mình nghĩ việc gây phức tạp thay vì thực hiện gọi trực tiếp là để chống debug tĩnh chăng?
 
-![alt text](image-12.png)
+![alt text](_IMG/image-12.png)
 
 - Tất nhiên là mình debug động :v. Tiếp cận bài toán, vì đã xác định rằng không cần quan tâm tới các phép toán sinh ra hàm, mình setup `breakpoint` ngay tại các vị trí gọi hàm sau khi tính toán để tiến tới những hàm xử lý thực sự.
 
-![alt text](image-13.png)
+![alt text](_IMG/image-13.png)
 
 - Sau khi nhập input, ta tiến tới hàm encrypt và dưới đây là 2 hàm xử lý của chall.
 
@@ -552,12 +552,12 @@ char __fastcall sub_7FF7D3951000(char *a1)
 
 - Trong hàm `sub_7FF7D3951000()` được gen ra bởi `sub_7FF7D3951200()`, chương trình thực hiện `rol`(8 byte) 1 đơn vị lần lượt 100 lần.
 
-![alt text](image-14.png)
+![alt text](_IMG/image-14.png)
 
 - Các thành phần được sử dụng trong phép tính này gồm 2 const cần nhặt ra là chuỗi `seed = "confused"` và `key[256]` mà mọi người có thể dễ ràng trace tới.
 
-![alt text](image-15.png)
-![alt text](image-16.png)
+![alt text](_IMG/image-15.png)
+![alt text](_IMG/image-16.png)
 
 - Dưới đây là chương trình mình dựng lại từ 2 hàm này để phục vụ `bruteforces` khi cần.
 
@@ -581,7 +581,7 @@ for i in range(0, len(ans), 8):
 
 - Tiếp tới là `to_Checker()`, chương trình khá đơn giản. Chỉ là trực tiếp kiểm tra `encrypted_data` với dải data từ `unk_7FF7D3976000` với độ dài 0x30.
 
-![alt text](image-17.png)
+![alt text](_IMG/image-17.png)
 
 - Khi mọi thứ rõ ràng đến vậy thì không cần bruteforce, mà thực ra dù muốn vét cạn cũng không được bởi chỉ riêng việc quét tất cả các bộ 8 kí tự 1 lần thôi đã đủ nổ máy rồi :v.
 
@@ -686,7 +686,7 @@ for k in ans:
 print(flag)
 ```
 
-![alt text](image-18.png)
+![alt text](_IMG/image-18.png)
 
 ```
 flag: KMA{e81eabf0-db79-463d-b227-ea47dcf6cac6}
