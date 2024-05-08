@@ -254,7 +254,7 @@ unsigned __int8 __cdecl binary_resolve()
 1 1 : mã hóa kí tự ở vị trí hiện được trỏ tới.
 ```
 
-- Những chức năng này dễ dàng nhìn ra được khi debug thôi. Nhiệm vụ của ta là lấy ra được flag đằng sau chuỗi `"Hi, thanks for reading me! The flag is: "`, vậy ta cần di chuyển liên tục tới len của chuỗi này rồi vừa in ra vừa di chuyển 1 đơn vị là được. Dưới đây là script lấy ra bộ truy vấn của mình,
+- Những chức năng này dễ dàng nhìn ra được khi debug thôi. Nhiệm vụ của ta là lấy ra được flag đằng sau chuỗi `"Hi, thanks for reading me! The flag is: "`, vậy ta cần di chuyển liên tục tới len của chuỗi này rồi vừa in ra vừa di chuyển 1 đơn vị là được. Dưới đây là script lấy ra bộ truy vấn của mình. Nếu có gì cần lưu ý thì, chương trình nhận input bằng hàm `getchar()` nên đừng nhập vào 1 chuỗi truy vấn nhé :v.
 
 ```python
 for i in range(0, 40*2): # chạy tới đuôi của chuỗi prefix
