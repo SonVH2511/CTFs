@@ -786,11 +786,11 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 
 - Chương trình từ `input` lấy ra các bộ 8bytes một để mã hóa rồi so sánh với `ans[80]`.
 
-![alt text](image-30.png)
+![alt text](_IMG/image-30.png)
 
 - Tham khảo cách decrypt của HEA, mình xây dựng 1 chương trình tương tự. Nếu có gì cần lưu ý thì, vì chương trình nhặt ra các bộ 8bytes một để mã hóa nên ta cần để ý cách lưu dữ liệu của 1 chương trình, ở đây là `little edian` - với kiểu dữ liệu `__int64` ~ `DWORD` mỗi 8byte một cần đảo lại vị trí thấp đến cao^^.
 
-![alt text](image-29.png)
+![alt text](_IMG/image-29.png)
 
 ```py
 enc = [0x49d5350d575ca310, 0xbffc208e9ef90f6a, 0x644681c7bb0cb7a2, 0x83e83897e0b61bea, 0x13ce365e5a9f6ddd,
