@@ -692,6 +692,142 @@ print(flag)
 flag: KMA{e81eabf0-db79-463d-b227-ea47dcf6cac6}
 ```
 
+### HEA
+
+- Chall: [HEA.exe](HEA/HEA.exe)
+
+- Chương trình tựa tựa thuật toán mã hóa `TEA`.
+
+```C
+int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  unsigned int cnt; // edi
+  int suffix_len; // esi
+  FILE *v5; // rax
+  size_t v6; // rax
+  int v7; // esi
+  __int64 buffer_len; // rbx
+  int Buffer_len; // eax
+  int suffix_val; // edx
+  _QWORD *Buf2; // rdx
+  unsigned __int64 v12; // r8
+  __int64 sum; // r10
+  unsigned __int64 v14; // r9
+  __int64 round_32; // r11
+  __int64 i; // rax
+  char Buffer[1040]; // [rsp+20h] [rbp-438h] BYREF
+
+  cnt = 0;
+  suffix_len = 0;
+  memset(Buffer, 0, sizeof(Buffer));
+  print("Enter flag: ");
+  v5 = _acrt_iob_func(0);
+  fgets(Buffer, 1024, v5);
+  v6 = strcspn(Buffer, "\n");
+  if ( v6 >= 0x410 )
+  {
+    _report_rangecheckfailure();
+    JUMPOUT(0x7FF7AD4812BBi64);
+  }
+  Buffer[v6] = 0;
+  if ( (strlen(Buffer) & 0xF) != 0 )
+  {
+    v7 = 16 - (strlen(Buffer) & 0xF);
+    suffix_len = strlen(Buffer) + v7;
+  }
+  buffer_len = suffix_len / 16;
+  Buffer_len = strlen(Buffer);
+  suffix_val = Buffer_len;
+  if ( Buffer_len < (__int64)suffix_len )
+  {
+    LOBYTE(suffix_val) = 0xCC;
+    memset(&Buffer[Buffer_len], suffix_val, suffix_len - (__int64)Buffer_len);
+  }
+  if ( buffer_len > 0 )
+  {
+    Buf2 = Buffer;
+    do
+    {
+      v12 = *Buf2;
+      sum = 0i64;
+      v14 = Buf2[1];
+      round_32 = 32i64;
+      do
+      {
+        sum += 0x123457898765432i64;
+        v12 += (sum + v14) ^ (16 * v14 - 0x1EC32D622D0480D8i64) ^ ((v14 >> 5) + 0x488D27F32AE91451i64);
+        v14 += (sum + v12) ^ (16 * v12 - 0x2CBDA60BFD707FD3i64) ^ ((v12 >> 5) + 0x424F0D99A012A826i64);
+        --round_32;
+      }
+      while ( round_32 );
+      *Buf2 = v12;
+      Buf2[1] = v14;
+      Buf2 += 2;
+      --buffer_len;
+    }
+    while ( buffer_len );
+  }
+  i = 0i64;
+  do
+  {
+    if ( Buffer[i] != ans[i] )
+    {
+      puts("Wrong!");
+      exit(1);
+    }
+    ++cnt;
+    ++i;
+  }
+  while ( cnt < 80 );
+  puts("Correct!");
+  return 0;
+}
+```
+
+- Chương trình từ `input` lấy ra các bộ 8bytes một để mã hóa rồi so sánh với `ans[80]`.
+
+![alt text](image-30.png)
+
+- Tham khảo cách decrypt của HEA, mình xây dựng 1 chương trình tương tự. Nếu có gì cần lưu ý thì, vì chương trình nhặt ra các bộ 8bytes một để mã hóa nên ta cần để ý cách lưu dữ liệu của 1 chương trình, ở đây là `little edian` - với kiểu dữ liệu `__int64` ~ `DWORD` mỗi 8byte một cần đảo lại vị trí thấp đến cao^^.
+
+![alt text](image-29.png)
+
+```py
+enc = [0x49d5350d575ca310, 0xbffc208e9ef90f6a, 0x644681c7bb0cb7a2, 0x83e83897e0b61bea, 0x13ce365e5a9f6ddd,
+       0x5b575f2b16d0f43d, 0xe537e3c7e41557c0, 0x89bda52571c130de, 0x2c9b3c6c4919e15f, 0x30a09411d777e851]
+dec = []
+
+__sum = 0x123457898765432*32
+
+# print(__sum)
+# i = 0
+
+for i in range(0, 9, 2):
+    _round = 32
+    # print(hex(enc[i]))
+    # print(hex(enc[i+1]))
+    tmp = __sum
+    while _round > 0:
+        enc[i+1] -= (tmp + enc[i]) ^ (16 * enc[i] - 0x2CBDA60BFD707FD3) ^ ((enc[i] >> 5) + 0x424F0D99A012A826)
+        enc[i+1] = enc[i+1] & 0xffffffffffffffff
+        enc[i] -= (tmp + enc[i+1]) ^ (16 * enc[i+1] - 0x1EC32D622D0480D8) ^ ((enc[i+1] >> 5) + 0x488D27F32AE91451)
+        enc[i] = enc[i] & 0xffffffffffffffff
+        tmp -= 0x123457898765432
+        _round -= 1
+
+for i in enc:
+    j = i
+    while j != 0:
+        dec.append(j & 0xff)
+        j >>= 8
+for i in dec:
+    print(chr(i), end="")
+```
+
+```
+flag: KCSC{833N_5p3nD1N'_m057_7H31r_L1v35_l1v1n'_1n_7H3_G4ng574'5_p4R4d123}
+```
+
 ## Mong WRITEUP này giúp ích cho các bạn!
 
 ```
