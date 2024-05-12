@@ -94,7 +94,7 @@ __int64 __fastcall sub_7FF69F661230(__int64 input, _BYTE *Fake)
 
   ![alt text](_IMG/image-5.png)
 
-- Rõ ràng là vậy. Khi mình đặt breakpoint tại đây và debug lại chương trình, hàm này được gọi ra trước `main()` và câu lệnh kiểm tra này luôn trả về `false`.
+- Rõ ràng là vậy. Khi mình đặt breakpoint tại đây và debug lại chương trình, hàm này được gọi ra trước `main()` và câu lệnh kiểm tra ở đây luôn trả về `false`.
 
   ![alt text](_IMG/image-6.png)
 
