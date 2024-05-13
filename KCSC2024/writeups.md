@@ -2,6 +2,8 @@
 
 ### rev_f@k3
 
+- Chall: [f@k3](Fake/re_fk3.exe)
+
 - Vẫn là hàm mã hóa RC4 quen thuộc nhưng cách các thông tin được giấu đi hợp lý khiến chall trở nên thú vị^^.
 
 - Nội dung hàm `main()` khá đơn giản, chương trình thực hiện decrypt `Cipher` được khởi tạo sẵn bằng `RC4` với `key` là `"F@**!"`. Sau đó kiểm tra `Input` với `decrypt data`.
@@ -118,21 +120,160 @@ flag: KCSC{1t_co5ld_be_right7_fla9_here_^.^@@}
 
 ### rev_RExRust
 
-- Bài này mình chưa làm được vì còn phase4, Mình sẽ hoàn thiện wu bài này khi giải được.
+- Chall: ![RExRust](RExRust/rexrust)
 
-- Dưới đây là script rev phase1,2,3. Dễ thấy phase1,2 hoàn toàn có thể truyền ngược lại ra str ban đầu, còn phase3 phải reverse 1 chút.
+- Đáng tiếc đây là bài mình solve được khi giải đã kết thúc, từ đấy mới thấy được việc kiên trì và bình tĩnh quan trọng như nào. Giờ thì vào bài thôi^^.
+
+- Chall này cấp cho ta một file `flag.enc` và 1 file ELF `rexrust`. Vậy khả năng file thực thi này là encryptor.
+
+- Dưới đây là `main()` của chương trình sau khi mình đọc nội dung các hàm bên trong và sửa tên để clean code. Tóm tắt sơ bộ, chương trình thực hiện đọc data từ file `flag.txt` rồi `encrypt` nó 4 lần, cuối cùng là ghi `encrypted data` ra file `flag.enc`.
+
+![alt text](_IMG/image-10.png)
+
+- Ban đầu mình còn tưởng nó là thuật toán encrypt đặc thù nào đấy, nhưng khi phân tích kĩ hơn thì có vẻ hoàn toàn không phải. Mình sẽ detect từng `Phase` một rồi rì vợt nó.
+
+#### Phase 1
+
+- Trông có vẻ không rõ ràng lắm, nhưng kết hợp giữa việc phân tích và đối chiếu với ouput của hàm, mình kết luận chức năng của hàm này là để đảo ngược chuỗi.
+
+- Nếu mọi người cần phân tích kĩ hơn thì, dễ thấy được trong quá trình debug rằng `*(_QWORD *)&v9.gap0[8]` là một `interator` để duyệt `input` xuyên suốt vòng `while()`. `v3` = `v5` - vị trí hiện tại. `v5` = `Input.len()` - 1. Ở dòng 40, Input.data tại vị trí `interator` trỏ tới, được gán bằng Input.data[v3].
+
+- Dễ hiểu hơn là: `Input[i] = Input[Input.len() - 1]`.
+
+- Sau đó, tại dòng 46 có một phép gán tương tự, `v2`~`Input.length - 1 - v6`, `v6 = *(_QWORD *)&v9.gap0[8]`. `v4 = Input.data_ptr[*(_QWORD *)&v9.gap0[8]]`.
+
+- Tức là: `Input[Input.len() - 1] = Input[i]`.
+
+![alt text](_IMG/image-11.png)
+
+- `Phase` này hoàn toàn có thể truyền ngược input vào để lấy được chuỗi gốc nên không cần rev. Dưới đây là script mô phỏng cho phase1.
 
 ```python
-str = [0x4b, 0x43, 0x53, 0x43, 0x7b, 0x32, 0x33,
-       0x31, 0x34, 0x32, 0x33, 0x34, 0x77, 0x71,
-       0x65, 0x72, 0x61, 0x73, 0x64, 0x66, 0x61,
-       0x73, 0x64, 0x66, 0x78, 0x7a, 0x63, 0x76,
-       0x7d, 0xa]
+def phase1(str):
+    return str[::-1]
+```
 
+#### Phase 2
+
+- `Phase2` có vẻ dễ đọc hơn, hàm này thực hiện swap byte của từng cặp phần tử liền kề cho nhau. Đi kèm với đó là các câu điều kiện để kiểm tra `index out of bound` hay `invalid index`.
+
+![alt te-12.png)
+
+- Hàm này cũng giống `Phase1`, truyền lại giá trị vào hàm để lấy lại được data gốc.
+
+```python
+def phase2(str):
+    for i in range(0, len(str)-1, 2):
+        # print(i)
+        j = i+1
+        v1 = (str[i] & 0xf) | (str[j] & 0xf0)
+        str[i] = (str[j] & 0xf) | (str[i] & 0xf0)
+        str[j] = v1
+    return str
+```
+
+#### Phase 3
+
+- Tới được hàm này rồi thì mình cũng không nhắc lại về cách `interator` hoạt động hay những hàm kiểm tra để làm dày code lên nữa.
+
+![alt text](_IMG/image-13.png)
+
+- Mô tả bằng câu từ dễ gây lú nên mình viết một đoạn chương trình mô phỏng cách hoạt động của hàm này cho mọi người dễ quan sát^^.
+
+```C
+for (int i=0;i<str.length()-2;++i)
+{
+  int tmp1 = str[i];
+  int tmp2 = str[i+2];
+  str[i] = (tmp1 - tmp2)&0xff;
+  str[i+2] = (tmp2 - tmp1)&0xff;
+}
+```
+
+- Giờ thì ta có một bài toán nho nhỏ.
+
+```s
+x = (x0 - y0) & 0xff
+y = (y0 - x0) & 0xff
+
+biết x,y tìm x0, y0
+```
+
+- Giải ra sẽ là:
+
+```s
+y0 = (x + y) & 0xff
+x0 = (x + y0) & 0xff
+```
+
+- Đúng là một lợi thế lớn nếu trong team có 1 crypto :v. Vì chương trình duyệt từ đầu đến cuối `encrypted data` nên ta cần duyệt ngược lại rồi dùng phép toán trên để dịch ngược ra `data` ban đầu.
+
+```python
+def rev_phase3(str):
+    for i in range(len(str)-1, 1, -1):
+        v5 = str[i-2]
+        v6 = str[i]
+        str[i] = (v5+v6) & 0xff
+        str[i-2] = (v5+str[i]) & 0xff
+    return str
+```
+
+- Nhớ rằng phải `&0xff` bởi giá trị ở đây là kiểu byte, đồng thời việc trừ 2 số có thể cho ra kết quả âm nếu không `&0xff`.
+
+#### Phase 4
+
+- Cuối cùng là `Phase 4`, cũng là phase mình mất nhiều thời gian nhất@@.
+
+![alt text](_IMG/image-14.png)
+
+- Hàm này thực hiện lấy `random()` một số `4 byte` rồi tách ra thành 4 phần tử `1 byte` và xor các phần tử trong `encryted data` với các byte này.
+
+- Ban đầu mình tính vét từ `0-0xffffffff` nhưng thời gian ước tính là 17 tiếng...
+
+![alt text](_IMG/image-15.png)
+
+- Khi không vét được, mình tính lọc các trường hợp trùng nhau như `00 01 02 03` với `03 02 01 00` vì các bộ này đều cho ra kết quả giống nhau. Nhưng khá phức tạp để lọc.
+
+- Lúc này `mindset` mình hơi lệch chút, rằng mình đi kiểm tra xem hàm random có phải bị custom và có sẵn một `key pool` hay không. Sau vài lần debug thì mình đành phải chuyển hướng vì có vẻ nó `"random"` thật :(.
+
+- Nghĩ một hồi thì ngộ ra rằng cho dù có là random thì cũng phải tách thành 4 phần tử 1 byte, vậy nên chúng `xor` với nhau chắc chắn sẽ ra giá trị trong khoảng `0-0xff`. Vậy là ta rút về duyệt từ 4 tỉ còn 256 phần tử @@.
+
+```python
+def phase4(str, num): # mô phỏng hàm Phase4
+    a = ((num >> 8) & 0xff) ^ ((num >> 16) & 0xff) ^ (
+        (num >> 24) & 0xff) ^ (num & 0xff)
+    for i in range(len(str)):
+        str[i] ^= a
+    return str
+
+def rev_phase4(str, num): # rì vợt hàm Phase4
+    # a = ((num >> 8) & 0xff) ^ ((num >> 16) & 0xff) ^ (
+    #     (num >> 24) & 0xff) ^ (num & 0xff)
+    # print(hex(num))
+    for i in range(len(str)):
+        # str[i] ^= a
+        str[i] ^= num
+    return str
+```
+
+####
+
+- Xong xuôi rồi, giờ thì truyền ngược vào để lấy flag thôi^^.
+
+#### Dưới đây là Script khôi phục lại flag
+
+```python
+# with open('E:\\CTF\\KCSC\\CTFs\\KCSC2024\\RExRust\\root_flag.enc', 'rb') as file:
+#     data = file.read()
+#     print(data)
+# enc = []
+# for i in data:
+#     enc.append(i)
+# print(enc)
+flag_format = "KCSC{"
 
 def phase1(str):
     return str[::-1]
-
 
 def phase2(str):
     for i in range(0, len(str)-1, 2):
@@ -143,7 +284,6 @@ def phase2(str):
         str[j] = v1
     return str
 
-
 def phase3(str):
     for i in range(0, len(str)-2):
         v5 = str[i]
@@ -151,7 +291,6 @@ def phase3(str):
         str[i] = (v5-v6) & 0xff
         str[i+2] = (v6-str[i]) & 0xff
     return str
-
 
 def rev_phase3(str):
     for i in range(len(str)-1, 1, -1):
@@ -161,18 +300,38 @@ def rev_phase3(str):
         str[i-2] = (v5+str[i]) & 0xff
     return str
 
+def phase4(str, num):
+    a = ((num >> 8) & 0xff) ^ ((num >> 16) & 0xff) ^ (
+        (num >> 24) & 0xff) ^ (num & 0xff)
+    for i in range(len(str)):
+        str[i] ^= a
+    return str
 
-def phase4(str):
-    a = b
+def rev_phase4(str, num):
+    # a = ((num >> 8) & 0xff) ^ ((num >> 16) & 0xff) ^ (
+    #     (num >> 24) & 0xff) ^ (num & 0xff)
+    # print(hex(num))
+    for i in range(len(str)):
+        # str[i] ^= a
+        str[i] ^= num
+    return str
 
 
-str = phase3(phase2(phase1(str)))
-for i in str:
-    print(chr(i), end=", ")
+for i in range(0, 0xff):
 
-str = phase1(phase2(rev_phase3(str)))
-for i in str:
-    print(chr(i), end=", ")
+    str = [68, 114, 184, 134, 66, 134, 170, 161, 128, 41, 65, 213, 228, 126, 61, 50, 148, 226, 153, 45, 54, 195, 15, 72, 222,
+           195, 40, 21, 214, 206, 11, 122, 20, 118, 242, 111, 190, 176, 134, 13, 126, 255, 142, 69, 62, 154, 206, 74, 237, 105]
+    enc = ""
+    tmp = phase1(phase2(rev_phase3(rev_phase4(str, i))))
+    for i in tmp:
+        enc += chr(i)
+    print(enc)
+```
+
+####
+
+```
+flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 ```
 
 ## Mong WRITEUP này giúp ích cho các bạn!
