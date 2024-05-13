@@ -120,7 +120,7 @@ flag: KCSC{1t_co5ld_be_right7_fla9_here_^.^@@}
 
 ### rev_RExRust
 
-- Chall: ![RExRust](RExRust/rexrust)
+- Chall: [RExRust](RExRust/rexrust)
 
 - Đáng tiếc đây là bài mình solve được khi giải đã kết thúc, từ đấy mới thấy được việc kiên trì và bình tĩnh quan trọng như nào. Giờ thì vào bài thôi^^.
 
