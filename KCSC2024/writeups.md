@@ -104,7 +104,7 @@ __int64 __fastcall sub_7FF69F661230(__int64 input, _BYTE *Fake)
 
 - Quay lại decrypt rồi nhảy vào hàm `strcmp fake` để quan sát output là gì.
 
-- Sau 4 phép `xor` đầu tiên thấy được cụm `KCSC` như ánh sáng cuối con đường vậy@@.
+- Sau 4 phép `xor` đầu tiên thấy được cụm `KCSC`.
 
 ![alt text](_IMG/image-9.png)
 
