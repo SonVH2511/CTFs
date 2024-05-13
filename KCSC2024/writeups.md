@@ -116,6 +116,65 @@ __int64 __fastcall sub_7FF69F661230(__int64 input, _BYTE *Fake)
 flag: KCSC{1t_co5ld_be_right7_fla9_here_^.^@@}
 ```
 
+### rev_RExRust
+
+- Bài này mình chưa làm được vì còn phase4, Mình sẽ hoàn thiện wu bài này khi giải được.
+
+- Dưới đây là script rev phase1,2,3. Dễ thấy phase1,2 hoàn toàn có thể truyền ngược lại ra str ban đầu, còn phase3 phải reverse 1 chút.
+
+```python
+str = [0x4b, 0x43, 0x53, 0x43, 0x7b, 0x32, 0x33,
+       0x31, 0x34, 0x32, 0x33, 0x34, 0x77, 0x71,
+       0x65, 0x72, 0x61, 0x73, 0x64, 0x66, 0x61,
+       0x73, 0x64, 0x66, 0x78, 0x7a, 0x63, 0x76,
+       0x7d, 0xa]
+
+
+def phase1(str):
+    return str[::-1]
+
+
+def phase2(str):
+    for i in range(0, len(str)-1, 2):
+        # print(i)
+        j = i+1
+        v1 = (str[i] & 0xf) | (str[j] & 0xf0)
+        str[i] = (str[j] & 0xf) | (str[i] & 0xf0)
+        str[j] = v1
+    return str
+
+
+def phase3(str):
+    for i in range(0, len(str)-2):
+        v5 = str[i]
+        v6 = str[i+2]
+        str[i] = (v5-v6) & 0xff
+        str[i+2] = (v6-str[i]) & 0xff
+    return str
+
+
+def rev_phase3(str):
+    for i in range(len(str)-1, 1, -1):
+        v5 = str[i-2]
+        v6 = str[i]
+        str[i] = (v5+v6) & 0xff
+        str[i-2] = (v5+str[i]) & 0xff
+    return str
+
+
+def phase4(str):
+    a = b
+
+
+str = phase3(phase2(phase1(str)))
+for i in str:
+    print(chr(i), end=", ")
+
+str = phase1(phase2(rev_phase3(str)))
+for i in str:
+    print(chr(i), end=", ")
+```
+
 ## Mong WRITEUP này giúp ích cho các bạn!
 
 ```
