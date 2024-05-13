@@ -157,7 +157,7 @@ def phase1(str):
 
 - `Phase2` có vẻ dễ đọc hơn, hàm này thực hiện swap byte của từng cặp phần tử liền kề cho nhau. Đi kèm với đó là các câu điều kiện để kiểm tra `index out of bound` hay `invalid index`.
 
-![alt te-12.png)
+![alt text](_IMG/image-12.png)
 
 - Hàm này cũng giống `Phase1`, truyền lại giá trị vào hàm để lấy lại được data gốc.
 
