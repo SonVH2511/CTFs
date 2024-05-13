@@ -330,6 +330,8 @@ for i in range(0, 0xff):
 
 ####
 
+![alt text](_IMG/image-16.png)
+
 ```
 flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 ```
