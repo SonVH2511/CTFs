@@ -349,7 +349,7 @@ flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 ![alt text](_IMG/image-18.png)
 ![alt text](_IMG/image-19.png)
 
-- Sau khi loại bỏ chúng và build lại, mình thu được hàm xử lý như sau.
+- Sau khi được hướng dẫn cách tìm và loại bỏ chúng rồi build lại, mình thu được hàm xử lý như sau.
 
 ```C
 int MainProcess()
