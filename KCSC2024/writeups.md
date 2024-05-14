@@ -336,7 +336,7 @@ for i in range(0, 0xff):
 flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 ```
 
-### BehindTheScenes
+### rev_BehindTheScenes
 
 - Bài này mình hoàn toàn không có ý tưởng gì trong giờ thi. Có một số vấn đề xuất hiện trong chall mà sau khi được anh Bình hướng dẫn mình mới có thể xử lý một phần.
 
