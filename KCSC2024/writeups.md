@@ -336,6 +336,384 @@ for i in range(0, 0xff):
 flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 ```
 
+### BehindTheScenes
+
+- Bài này mình hoàn toàn không có ý tưởng gì trong giờ thi. Có một số vấn đề xuất hiện trong chall mà sau khi được anh Bình hướng dẫn mình mới có thể xử lý một phần.
+
+- Đầu tiên là việc không chuyển chế độ được. Mình không có cách nào convert mã máy sang `graph view` nên khi làm hơi "cụt tay", có thể do mình đang bị phụ thuộc vào mã giả nhiều quá.
+
+![alt text](_IMG/image-17.png)
+
+- Nguyên do khúc đầu chương trình không thể gen ra mã giả bởi chall đã bị nhét thêm byte rác vào. Chúng là những giá trị không làm ảnh hưởng tới chương trình và xuất hiện dưới dạng những câu lệnh không có ý nghĩa như dưới đây.
+
+![alt text](_IMG/image-18.png)
+![alt text](_IMG/image-19.png)
+
+- Sau khi loại bỏ chúng và build lại, mình thu được hàm xử lý như sau.
+
+```C
+int MainProcess()
+{
+  const char *v0; // eax
+  int v1; // eax
+  const char *v3; // eax
+  char v4; // al
+  char v5; // al
+  int (__cdecl *v6)(char *); // [esp+10h] [ebp-118h]
+  int i; // [esp+14h] [ebp-114h]
+  int v8; // [esp+18h] [ebp-110h]
+  char v9[4]; // [esp+1Ch] [ebp-10Ch] BYREF
+  char v10[260]; // [esp+20h] [ebp-108h] BYREF
+
+  (*(void (__thiscall **)(int, int, char *))(*(_DWORD *)dword_E57794 + 32))(dword_E57794, 260, v10);
+  v0 = (const char *)base64Decrypt("Q2FjaGVkYXRhLmJpbg==", v9);
+  sprintf_s(byte_E57658, 0x104u, "%s%s", v10, v0);
+  for ( i = 0; i < 48; ++i )
+    ;
+  if ( (unsigned __int8)sub_E52240(byte_E57658) )
+  {
+    v3 = (const char *)base64Decrypt("S0NTQy5kbGw=", v9);
+    sprintf_s(Buffer, 0x104u, "%s%s", v10, v3);
+    sub_E53860(byte_E57658, Buffer);
+    v8 = (**(int (__thiscall ***)(int, char *))dword_E57794)(dword_E57794, Buffer);
+    if ( v8 )
+    {
+      v6 = (int (__cdecl *)(char *))(*(int (__thiscall **)(int, int, const char *))(*(_DWORD *)dword_E57794 + 8))(
+                                      dword_E57794,
+                                      v8,
+                                      "HelloWorld");
+      if ( v6 )
+      {
+        if ( v6(aUefhnioujqwefn) )
+        {
+          (*(void (__thiscall **)(int, int))(*(_DWORD *)dword_E57794 + 4))(dword_E57794, v8);
+          v4 = sub_E53340("Q29ycmVjdA==", v9);
+          sub_E51F20("%s", v4);
+        }
+        else
+        {
+          (*(void (__thiscall **)(int, int))(*(_DWORD *)dword_E57794 + 4))(dword_E57794, v8);
+          v5 = sub_E53340("V3Jvbmc=", v9);
+          sub_E51F20("%s", v5);
+        }
+        (*(void (__thiscall **)(int, int))(*(_DWORD *)dword_E57794 + 4))(dword_E57794, v8);
+        return 0;
+      }
+      else
+      {
+        return 0;
+      }
+    }
+    else
+    {
+      return 0;
+    }
+  }
+  else
+  {
+    v1 = Print(std::cerr, "Wrong");
+    std::ostream::operator<<(v1, sub_E52930);
+    return 0;
+  }
+}
+```
+
+- Như ở trên, có rất nhiều những địa chỉ được call nhưng không rõ chức năng. Chúng được gọi thông qua các hàm `resolve API` rồi `call` ngay sau đó.
+
+![alt text](_IMG/image-20.png)
+
+- Ta có thể đặt bp sau hàm này và kiểm tra giá trị trả về(`eax`) để xác định hàm được gọi.
+
+- Ở dòng 14 xuất hiện 1 hàm được gọi ra là GetTempPathA, với output trả ra nằm ở `v10`. Trace tới `v10` thấy xuất hiện path `"C:\Users\ADMINZ\AppData\Local\Temp\"` cùng với `"Cachedata.bin"` nằm trong `v0`.
+
+![alt text](_IMG/image-21.png)
+
+- Đường dẫn này được nối vào 1 `const` khác.
+
+![alt text](_IMG/image-22.png)
+
+- Sau đó chương trình với các bước gọi hàm như vừa rồi, thực hiện lấy ra địa chỉ hàm `wininet_InternetOpenA()`. Đồng thời thực hiện sinh 1 đường dẫn để conect tới là `http://172.245.6.189:4444/test.txt` sau khi đem const data được khai báo `xor` với 0x55.
+
+![alt text](_IMG/image-23.png)
+![alt text](_IMG/image-24.png)
+
+- Một hồi debug mình cũng hiểu đại khái khi thấy một file `dll` được tải xuống ở đường dẫn `v10`.
+
+![alt text](_IMG/image-25.png)
+
+- Sau đó hàm xử lý đường truyền vào `v8` và truyền vào trong 1 `resolve API` như 1 tham số.
+
+![alt text](_IMG/image-26.png)
+
+- Nhảy tới thì thấy hàm được resolve ra khá quen thuộc trong việc thực hiện `dll injection`. Vậy thì có thể khẳng định rằng chương trình thực hiện tải từ trên mạng về 1 file dll tại đường dẫn ở trên, sau đó lưu tại `C:\Users\ADMINZ\AppData\Local\Temp\` với cái tên `"KCSC.dll"` rồi thực hiện inject nó vào chương trình.
+
+![alt text](_IMG/image-27.png)
+
+- Ta hoàn toàn có thể tìm kiếm nó ở đường dẫn này.
+
+![alt text](_IMG/image-28.png)
+
+- Thực thi đoạn chương trình được inject vào. ta có một hàm kiểm tra như dưới.
+
+![alt text](_IMG/image-29.png)
+
+```C
+int __cdecl kcsc_HelloWorld(int a1)
+{
+  const char *v1; // eax
+  int v2; // ecx
+  const char *v3; // esi
+  char v4; // al
+  char v5; // bl
+  unsigned int v6; // edi
+  char v7; // bh
+  bool v8; // zf
+  int v9; // edx
+  int v10; // eax
+  int v11; // edx
+  int v12; // edx
+  int v13; // edx
+  char v14; // al
+  unsigned int v15; // edx
+  char v16; // al
+  bool v17; // cf
+  int v18; // edx
+  int v19; // eax
+  int v20; // edx
+  int v21; // edx
+  int v22; // edx
+  char v23; // al
+  int v24; // edx
+  int v25; // esi
+  __int128 v27[2]; // [esp+4h] [ebp-618h] BYREF
+  int v28; // [esp+24h] [ebp-5F8h]
+  int v29; // [esp+28h] [ebp-5F4h]
+  int v30; // [esp+2Ch] [ebp-5F0h]
+  int v31; // [esp+30h] [ebp-5ECh]
+  char v32; // [esp+37h] [ebp-5E5h]
+  const char *v33; // [esp+38h] [ebp-5E4h]
+  __int128 v34[69]; // [esp+3Ch] [ebp-5E0h]
+  int v35; // [esp+48Ch] [ebp-190h]
+  __int16 v36; // [esp+490h] [ebp-18Ch]
+  char v37[390]; // [esp+492h] [ebp-18Ah] BYREF
+
+  if ( ucrtbase_strncmp(a1, "de(RYpt3d_bu", 0xCu) )
+    return 0;
+  v34[0] = xmmword_629E3360;
+  v34[1] = xmmword_629E3510;
+  v34[2] = xmmword_629E3430;
+  v34[3] = xmmword_629E3370;
+  v34[4] = xmmword_629E32B0;
+  v34[5] = xmmword_629E34A0;
+  v34[6] = xmmword_629E32D0;
+  v34[7] = xmmword_629E3200;
+  v34[8] = xmmword_629E3260;
+  v34[9] = xmmword_629E3520;
+  v34[10] = xmmword_629E33F0;
+  v34[11] = xmmword_629E32C0;
+  v34[12] = xmmword_629E32A0;
+  v34[13] = xmmword_629E31F0;
+  v34[14] = xmmword_629E34D0;
+  v34[15] = xmmword_629E3160;
+  v34[16] = xmmword_629E33B0;
+  v34[17] = xmmword_629E3140;
+  v34[18] = xmmword_629E3170;
+  v34[19] = xmmword_629E3490;
+  v34[20] = xmmword_629E30C0;
+  v34[21] = xmmword_629E33C0;
+  v34[22] = xmmword_629E3440;
+  v34[23] = xmmword_629E3110;
+  v34[24] = xmmword_629E3480;
+  v34[25] = xmmword_629E3320;
+  v34[26] = xmmword_629E3450;
+  v34[27] = xmmword_629E3500;
+  v34[28] = xmmword_629E34B0;
+  v34[29] = xmmword_629E3460;
+  v34[30] = xmmword_629E33D0;
+  v34[31] = xmmword_629E34E0;
+  v34[32] = xmmword_629E3130;
+  v34[33] = xmmword_629E3120;
+  v34[34] = xmmword_629E3230;
+  v34[35] = xmmword_629E33A0;
+  v34[36] = xmmword_629E30F0;
+  v34[37] = xmmword_629E3350;
+  v34[38] = xmmword_629E3190;
+  v34[39] = xmmword_629E3150;
+  v34[40] = xmmword_629E32E0;
+  v34[41] = xmmword_629E3210;
+  v34[42] = xmmword_629E31C0;
+  v35 = 1691263788;
+  v34[43] = xmmword_629E3270;
+  v36 = 20889;
+  v34[44] = xmmword_629E3330;
+  v34[45] = xmmword_629E33E0;
+  v34[46] = xmmword_629E3290;
+  v34[47] = xmmword_629E32F0;
+  v34[48] = xmmword_629E34F0;
+  v34[49] = xmmword_629E3240;
+  v34[50] = xmmword_629E3380;
+  v34[51] = xmmword_629E31D0;
+  v34[52] = xmmword_629E3340;
+  v34[53] = xmmword_629E3400;
+  v34[54] = xmmword_629E3220;
+  v34[55] = xmmword_629E31A0;
+  v34[56] = xmmword_629E3180;
+  v34[57] = xmmword_629E3420;
+  v34[58] = xmmword_629E34C0;
+  v34[59] = xmmword_629E3250;
+  v34[60] = xmmword_629E3280;
+  v34[61] = xmmword_629E31B0;
+  v34[62] = xmmword_629E3410;
+  v34[63] = xmmword_629E3300;
+  v34[64] = xmmword_629E30E0;
+  v34[65] = xmmword_629E30D0;
+  v34[66] = xmmword_629E3100;
+  v34[67] = xmmword_629E3390;
+  v34[68] = xmmword_629E3310;
+  ((void (__cdecl *)(char *, _DWORD, int))unk_629E2371)(v37, 0, 390);
+  v27[0] = xmmword_629E3470;
+  v27[1] = xmmword_629E31E0;
+  v28 = 698264022;
+  v29 = 1219130212;
+  v30 = -1161672993;
+  v1 = (const char *)ucrtbase__mbsdup(a1);
+  v2 = 0;
+  v3 = v1;
+  v31 = 0;
+  if ( strlen(v1) == 44 )
+  {
+    v32 = v4;
+    v5 = v4;
+    while ( 1 )
+    {
+      v6 = 0;
+      if ( (v4 & 1) != 0 )
+      {
+        v7 = *v3;
+        v33 = v3 + 1;
+        v8 = &v3[strlen(v3) + 1] == v3 + 1;
+        v9 = v31;
+        if ( !v8 )
+        {
+          while ( 1 )
+          {
+            v10 = v9 / 3;
+            v11 = v31++;
+            v12 = v11 - 3 * v10;
+            if ( !v12 )
+            {
+              v33 = v3 + 1;
+              v15 = (unsigned int)&v3[strlen(v3) + 1];
+              v16 = v7;
+              if ( v6 != v15 - (_DWORD)(v3 + 1) - 1 )
+                v16 = v3[v6 + 1];
+              v3[v6] ^= v16 - *((_BYTE *)v34 + v2);
+              goto LABEL_19;
+            }
+            v13 = v12 - 1;
+            if ( !v13 )
+              break;
+            if ( v13 == 1 )
+            {
+              v33 = v3 + 1;
+              if ( v6 == strlen(v3) - 1 )
+                v3[v6] = v7 + *((_BYTE *)v34 + v2) - v3[v6];
+              else
+                v3[v6] = *((_BYTE *)v34 + v2) + v3[v6 + 1] - v3[v6];
+LABEL_19:
+              ++v2;
+            }
+            ++v6;
+            v33 = v3 + 1;
+            v17 = v6 < strlen(v3);
+            v9 = v31;
+            if ( !v17 )
+              goto LABEL_40;
+          }
+          v33 = v3 + 1;
+          if ( v6 == strlen(v3) - 1 )
+            v14 = v7 ^ *((_BYTE *)v34 + v2);
+          else
+            v14 = *((_BYTE *)v34 + v2) ^ v3[v6 + 1];
+          v3[v6] += v14;
+          goto LABEL_19;
+        }
+        goto LABEL_40;
+      }
+      v33 = v3 + 1;
+      v8 = &v3[strlen(v3) + 1] == v3 + 1;
+      v18 = v31;
+      if ( !v8 )
+        break;
+LABEL_40:
+      v4 = v32 + 1;
+      v32 = v4;
+      if ( v4 >= 24 )
+        goto LABEL_41;
+    }
+    while ( 1 )
+    {
+      v19 = v18 / 3;
+      v20 = v31++;
+      v21 = v20 - 3 * v19;
+      if ( !v21 )
+      {
+        if ( !v6 )
+        {
+          v5 = *v3 ^ *((_BYTE *)v34 + v2);
+          goto LABEL_36;
+        }
+        v23 = v3[v6] ^ (v3[v6 - 1] - *((_BYTE *)v34 + v2));
+        goto LABEL_35;
+      }
+      v22 = v21 - 1;
+      if ( !v22 )
+        break;
+      if ( v22 == 1 )
+      {
+        if ( !v6 )
+        {
+          v5 = *v3 - *((_BYTE *)v34 + v2);
+LABEL_36:
+          ++v2;
+          goto LABEL_37;
+        }
+        v23 = v3[v6 - 1] + *((_BYTE *)v34 + v2) - v3[v6];
+        goto LABEL_35;
+      }
+LABEL_37:
+      if ( v6 == strlen(v3) - 1 )
+        v3[v6] = v5;
+      ++v6;
+      v33 = v3 + 1;
+      v17 = v6 < strlen(v3);
+      v18 = v31;
+      if ( !v17 )
+        goto LABEL_40;
+    }
+    if ( !v6 )
+    {
+      v5 = *v3 + *((_BYTE *)v34 + v2);
+      goto LABEL_36;
+    }
+    v23 = v3[v6] + (v3[v6 - 1] ^ *((_BYTE *)v34 + v2));
+LABEL_35:
+    v3[v6 - 1] = v5;
+    v5 = v23;
+    goto LABEL_36;
+  }
+LABEL_41:
+  v24 = 0;
+  v25 = v3 - (const char *)v27;
+  while ( *((_BYTE *)v27 + v24 + v25) == *((_BYTE *)v27 + v24) )
+  {
+    if ( ++v24 >= 44 )
+      return 1;
+  }
+  return 0;
+}
+```
+
 ## Mong WRITEUP này giúp ích cho các bạn!
 
 ```
