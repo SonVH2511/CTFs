@@ -342,6 +342,8 @@ flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 
 - Bài này mình hoàn toàn không có ý tưởng gì trong giờ thi. Có một số vấn đề xuất hiện trong chall mà sau khi được anh Bình hướng dẫn mình mới có thể xử lý một phần.
 
+- Đồng thời, mình có thể solve bài này khi đã nhận được rất nhiều sự gợi ý và hỗ trợ nên wu chall này sẽ không khách quan và một số chỗ chưa giải thích được rõ ràng, mọi người có thể tham khảo [WU của anh Bình](https://github.com/noobmannn/KCSC_CTF_2024/blob/main/behind%20the%20scenes/README.md) sẽ hay hơn^^.
+
 - Đầu tiên là việc không chuyển chế độ được. Mình không có cách nào convert mã máy sang `graph view` nên khi làm hơi "cụt tay", có thể do mình đang bị phụ thuộc vào mã giả nhiều quá.
 
 ![alt text](_IMG/image-17.png)
@@ -455,7 +457,7 @@ int MainProcess()
 
 ![alt text](_IMG/image-28.png)
 
-- Thực thi đoạn chương trình được inject vào. ta có một hàm kiểm tra như dưới.
+- Tới đoạn chương trình được inject vào. ta có một hàm kiểm tra như dưới.
 
 ![alt text](_IMG/image-29.png)
 
@@ -714,6 +716,228 @@ LABEL_41:
   }
   return 0;
 }
+```
+
+- rev hết đống này mình mất nửa ngày @@.
+
+```python
+cipher = [0xD1, 0x46, 0x40, 0x91, 0x2F, 0x64, 0x42, 0xD6, 0xE9, 0x2D,
+          0x19, 0x28, 0x10, 0xC8, 0x79, 0x88, 0x70, 0x32, 0xC6,..]
+target = [0x0F, 0x21, 0xCB, 0x47, 0xF6, 0xB0, 0x0E, 0xA0, 0x69, 0x51,
+          0x5A, 0x08, 0x47, 0x7E, 0x21, 0xD5, 0x8E, 0x31, 0xF4,..]
+Str = "de(RYpt3d_bu*******************************}"
+Input = []
+for i in Str:
+    Input.append(ord(i))
+_len = 44
+_24 = 24
+# print(0x2c)
+# print(len(Input))
+
+v2 = 0
+v32 = 0
+v17 = 0
+for j in range(_24):
+    v7 = Input[0]
+    if j & 1 != 0:
+        for v6 in range(_len):
+            _mod3 = v32 % 3
+            if _mod3 == 0:
+                # if i == _len-1:
+                # v7 = Input[i]
+                # v34 = Input[v6+1]
+                if v6 != _len-1:
+                    # print(v6)
+                    # print(Input[v6+1])
+                    # v7 = Input[v6+1]
+                    Input[v6] = (Input[v6] ^ (Input[v6+1]-cipher[v2])) & 0xff
+                else:
+                    Input[v6] = (Input[v6] ^ (v7-cipher[v2])) & 0xff
+            elif (_mod3 - 1) == 1:
+                if v6 == _len-1:
+                    Input[v6] = (((v7 + cipher[v2]) & 0xff) - Input[v6]) & 0xff
+                else:
+                    Input[v6] = ((cipher[v2] + Input[v6+1])-Input[v6]) & 0xff
+            else:
+                if v6 == _len-1:
+                    Input[v6] += (v7 ^ cipher[v2])
+                    Input[v6] &= 0xff
+                else:
+                    Input[v6] += (cipher[v2] ^ Input[v6+1])
+                    Input[v6] &= 0xff
+            v32 += 1
+            v2 += 1
+    else:
+        v5 = 0
+        v24 = 0
+        for v6 in range(_len):
+            _mod3 = v32 % 3
+
+            if _mod3 == 0:
+                if v6 == 0:
+                    v5 = Input[0] ^ cipher[v2]
+                else:
+                    v24 = Input[v6] ^ ((Input[v6-1]-cipher[v2]) & 0xff)
+                    Input[v6-1] = v5
+                    v5 = v24
+            elif (_mod3 - 1) == 1:
+                if v6 == 0:
+                    v5 = (Input[0] - cipher[v2]) & 0xff
+                else:
+                    v24 = (Input[v6-1] + cipher[v2] - Input[v6]) & 0xff
+                    Input[v6-1] = v5
+                    v5 = v24
+            else:
+                if v6 == 0:
+                    v5 = (Input[0] + cipher[v2]) & 0xff
+                else:
+                    v24 = (Input[v6] + (Input[v6-1] ^ cipher[v2])) & 0xff
+                    Input[v6-1] = v5
+                    v5 = v24
+
+            if v6 == _len-1:
+                Input[v6] = v5
+            v32 += 1
+            v2 += 1
+
+for i in Input:
+    print(hex(i), end=",")
+```
+
+- Từ đó mình dùng `z3` để giải và nhận được fakeflag
+
+![alt text](image-30.png)
+
+- Manh mối ở đây là header `de(RYpt3d_bu`, khả năng cao nó bị ghi đè từ trước. Mình thực hiện trace lại từ khúc tải file `test.txt` về và thấy một đoạn mã hóa `RC4` được resolve ra để decrypt nó thành file `.dll`.
+
+- Hàm `RC4 decrypt` này thay vì return trực tiếp `data_enc[]` sau khi mã hóa thì lại trả về 1 hàm thực thi.
+
+![alt text](image-31.png)
+
+- Khả năng cao hàm trả về thực hiện `checkDebugger`, Bởi có một hàm luôn bị bỏ qua dưới đây.
+
+![alt text](image-32.png)
+
+- Khi mình nhảy vào thì thấy trong hàm biến đổi, có một mảng 12 phần tử bằng với cái input header `de(RYpt3d_bu`.
+
+![alt text](image-33.png)
+
+- Không nghĩ nhiều, setIP vào và chạy hàm này, quay lại hàm `HelloWorld` thì header đã chuyển thành `KCSC{kcscctf` và `target[]` cũng bị biến đổi theo.
+
+- Giờ thì thay đổi tham số và decrypt nó thôi.
+
+```python
+from z3 import *
+cipher = [0xD1, 0x46, 0x40, 0x91, 0x2F, 0x64, 0x42, 0xD6, 0xE9, 0x2D,
+          0x19, 0x28, 0x10, 0xC8, 0x79, 0x88, 0x70, 0x32, 0xC6, 0x47,
+          0x35, 0x8D, 0x33, 0xE7, 0xB8, 0x70, 0xF2, 0x87, 0xDB,...]
+target = [0x41, 0xA5, 0xC3, 0xC7, 0x9A, 0x35, 0x7E, 0xE9, 0x20, 0xB8,
+          0x4C, 0xB8, 0x46, 0x50, 0x29, 0x0A, 0xAC, 0xC2, 0x19, 0xFA,
+          0xAB, 0xCC, 0xE4, 0xF4, 0x92, 0x68, 0xFE, 0xDF, 0xD6, 0x22,
+          0xAA, 0x2A, 0x3D, 0xA5, 0x3A, 0x58, 0x28, 0x84, 0x35, 0x0F,
+          0xE6, 0xE9, 0x31, 0x92]
+# print(len(target))
+# inp = [BitVec('x1[%d]'%i, 8) for i in range(44)]
+# s = Solver()
+# for i in range(len(inp)):
+#     s.add(inp[i] > 0x20)
+#     s.add(inp[i] < 0x7f)
+
+# print("*"*44)
+# FAKE HEADER: de(RYpt3d_bu
+Str = "KCSC{kcscctf*******************************}"
+Input = [BitVec('x1[%d]' % i, 8) for i in range(44)]
+s = Solver()
+for i in range(len(Input)):
+    s.add(Input[i] > 0x20)
+    s.add(Input[i] < 0x7f)
+header = 'KCSC{kcscctf'
+# header ='de(RYpt3d_bu'
+
+for i in range(len(header)):
+    s.add(Input[i] == ord(header[i]))
+
+_len = 44
+_24 = 24
+v2 = 0
+v32 = 0
+v17 = 0
+for j in range(_24):
+    v7 = Input[0]
+    if j & 1 != 0:
+        for v6 in range(_len):
+            _mod3 = v32 % 3
+            if _mod3 == 0:
+                # if i == _len-1:
+                # v7 = Input[i]
+                # v34 = Input[v6+1]
+                if v6 != _len-1:
+                    # print(v6)
+                    # print(Input[v6+1])
+                    # v7 = Input[v6+1]
+                    Input[v6] = (Input[v6] ^ (Input[v6+1]-cipher[v2])) & 0xff
+                else:
+                    Input[v6] = (Input[v6] ^ (v7-cipher[v2])) & 0xff
+            elif (_mod3 - 1) == 1:
+                if v6 == _len-1:
+                    Input[v6] = (((v7 + cipher[v2]) & 0xff) - Input[v6]) & 0xff
+                else:
+                    Input[v6] = ((cipher[v2] + Input[v6+1])-Input[v6]) & 0xff
+            else:
+                if v6 == _len-1:
+                    Input[v6] = (Input[v6] + (v7 ^ cipher[v2])) & 0xff
+                    # Input[v6] &= 0xff
+                else:
+                    Input[v6] = (Input[v6] + (cipher[v2] ^ Input[v6+1])) & 0xff
+                    # Input[v6] &= 0xff
+            v32 += 1
+            v2 += 1
+    else:
+        v5 = 0
+        v24 = 0
+        for v6 in range(_len):
+            _mod3 = v32 % 3
+
+            if _mod3 == 0:
+                if v6 == 0:
+                    v5 = Input[0] ^ cipher[v2]
+                else:
+                    v24 = Input[v6] ^ ((Input[v6-1]-cipher[v2]) & 0xff)
+                    Input[v6-1] = v5
+                    v5 = v24
+            elif (_mod3 - 1) == 1:
+                if v6 == 0:
+                    v5 = (Input[0] - cipher[v2]) & 0xff
+                else:
+                    v24 = (Input[v6-1] + cipher[v2] - Input[v6]) & 0xff
+                    Input[v6-1] = v5
+                    v5 = v24
+            else:
+                if v6 == 0:
+                    v5 = (Input[0] + cipher[v2]) & 0xff
+                else:
+                    v24 = (Input[v6] + (Input[v6-1] ^ cipher[v2])) & 0xff
+                    Input[v6-1] = v5
+                    v5 = v24
+            if v6 == _len-1:
+                Input[v6] = v5
+            v32 += 1
+            v2 += 1
+
+for i in range(44):
+    s.add(Input[i] == target[i])
+
+if s.check() == sat:
+    print(s.model())
+else:
+    print('Fail')
+
+```
+
+![alt text](image-34.png)
+
+```
+flag: KCSC{kcscctf_2024_1_l0v3_y0u_@RSeqTke3a5v3D}
 ```
 
 ## Mong WRITEUP này giúp ích cho các bạn!
