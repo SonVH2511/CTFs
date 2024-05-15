@@ -340,6 +340,8 @@ flag: KCSC{r3v3rs3_rust_1s_funny_4nd_34sy_227da29931351}
 
 ### rev_BehindTheScenes
 
+- Chall: [BehindTheScenes](behindthescenes/chall/chall/chall.exe)
+
 - Bài này mình hoàn toàn không có ý tưởng gì trong giờ thi. Có một số vấn đề xuất hiện trong chall mà sau khi được anh Bình hướng dẫn mình mới có thể xử lý một phần.
 
 - Đồng thời, mình có thể solve bài này khi đã nhận được rất nhiều sự gợi ý và hỗ trợ nên wu chall này sẽ không khách quan và một số chỗ chưa giải thích được rõ ràng, mọi người có thể tham khảo [WU của anh Bình](https://github.com/noobmannn/KCSC_CTF_2024/blob/main/behind%20the%20scenes/README.md) sẽ hay hơn^^.
