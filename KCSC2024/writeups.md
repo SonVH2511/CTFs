@@ -206,7 +206,9 @@ y0 = (x + y) & 0xff
 x0 = (x + y0) & 0xff
 ```
 
-- Đúng là một lợi thế lớn nếu trong team có 1 crypto :v. Vì chương trình duyệt từ đầu đến cuối `encrypted data` nên ta cần duyệt ngược lại rồi dùng phép toán trên để dịch ngược ra `data` ban đầu.
+- Đúng là một lợi thế lớn nếu trong team có 1 crypto :v.
+
+- Vì chương trình duyệt từ đầu đến cuối `encrypted data` nên ta cần duyệt ngược lại rồi dùng phép toán trên để dịch ngược ra `data` ban đầu.
 
 ```python
 def rev_phase3(str):
