@@ -806,21 +806,21 @@ for i in Input:
 
 - Từ đó mình dùng `z3` để giải và nhận được fakeflag
 
-![alt text](image-30.png)
+![alt text](_IMG/image-30.png)
 
 - Manh mối ở đây là header `de(RYpt3d_bu`, khả năng cao nó bị ghi đè từ trước. Mình thực hiện trace lại từ khúc tải file `test.txt` về và thấy một đoạn mã hóa `RC4` được resolve ra để decrypt nó thành file `.dll`.
 
 - Hàm `RC4 decrypt` này thay vì return trực tiếp `data_enc[]` sau khi mã hóa thì lại trả về 1 hàm thực thi.
 
-![alt text](image-31.png)
+![alt text](_IMG/image-31.png)
 
 - Khả năng cao hàm trả về thực hiện `checkDebugger`, Bởi có một hàm luôn bị bỏ qua dưới đây.
 
-![alt text](image-32.png)
+![alt text](_IMG/image-32.png)
 
 - Khi mình nhảy vào thì thấy trong hàm biến đổi, có một mảng 12 phần tử bằng với cái input header `de(RYpt3d_bu`.
 
-![alt text](image-33.png)
+![alt text](_IMG/image-33.png)
 
 - Không nghĩ nhiều, setIP vào và chạy hàm này, quay lại hàm `HelloWorld` thì header đã chuyển thành `KCSC{kcscctf` và `target[]` cũng bị biến đổi theo.
 
@@ -934,7 +934,7 @@ else:
 
 ```
 
-![alt text](image-34.png)
+![alt text](_IMG/image-34.png)
 
 ```
 flag: KCSC{kcscctf_2024_1_l0v3_y0u_@RSeqTke3a5v3D}
