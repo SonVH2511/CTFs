@@ -773,25 +773,25 @@ if input.len() == 44
     if (j & 1 != 0)
       for(v6 : 44)
       {
-        // encrypt_even
+        # encrypt_even
         if (v31 % 3 == 0):
-          // execute1
+          # execute1
         elif ((v31 % 3) - 1) == 1:
-          // execute2
+          # execute2
         else
-          // execute3
+          # execute3
         v31++
       }
     else
       for(v6 : 44)
       {
-        //encrypt_odd
+        # encrypt_odd
         if (v31 % 3 == 0):
-          // execute1
+          # execute1
         elif ((v31 % 3) - 1) == 1:
-          // execute2
+          # execute2
         else
-          // execute3
+          # execute3
         v31++
       }
 }
@@ -908,6 +908,7 @@ for i in Input:
 - Giờ thì thay đổi tham số và decrypt nó thôi.
 
 ```python
+# cipher khá dài nên mình không viết hết ra, script đầy đủ nằm trong thư mục cùng tên Chall^^.
 from z3 import *
 cipher = [0xD1, 0x46, 0x40, 0x91, 0x2F, 0x64, 0x42, 0xD6, 0xE9, 0x2D,
           0x19, 0x28, 0x10, 0xC8, 0x79, 0x88, 0x70, 0x32, 0xC6, 0x47,
