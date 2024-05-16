@@ -428,7 +428,7 @@ int MainProcess()
 
 ![alt text](_IMG/image-20.png)
 
-- Ta có thể đặt bp sau hàm này và kiểm tra giá trị trả về(`eax`) để xác định hàm được gọi.
+- Ta có thể đặt bp sau hàm này và kiểm tra giá trị trả về(`eax`) để xác định hàm được resolve ra.
 
 - Ở dòng 14 xuất hiện 1 hàm được gọi ra là GetTempPathA, với output trả ra nằm ở `v10`. Trace tới `v10` thấy xuất hiện path `"C:\Users\ADMINZ\AppData\Local\Temp\"` cùng với `"Cachedata.bin"` nằm trong `v0`.
 
@@ -720,6 +720,85 @@ LABEL_41:
 }
 ```
 
+- Một chút phân tích, hàm trên là chương trình đã được `optimize` khiến chương trình hơi khó quan sát. Tuy nhiên vẫn có những đặc điểm nhất định để phân tích ra.
+
+- Vòng lặp đầu tiên được lặp 24 lần. Khá khó tìm vì `LABEL_40` này không đặt ở dưới cùng.
+
+![alt text](_IMG/image-35.png)
+
+- Biện pháp ở đây là mình trace ngược lại từ `LABEL_41` bởi các tác vụ xử lý của LABEL này là kiểm tra output sau khi mã hóa với `target[]` là `v27`.
+
+- Lại kéo lên để tiến vào các hàm xử lý bên trong, ta thấy trong hàm xử lý đầu xuất hiện trước tiên là lệnh kiểm tra chẵn lẻ biến `v4`. Sau khi debug lại nhiều lần thì mình kết luận `v4` ~ `v1`, mọi người hoàn toàn có thể đưa chuột vào và thấy `v1`~`eax`, `v4`~`al`.
+
+![alt text](_IMG/image-36.png)
+
+- Sau đó, dựa vào v4 là chẵn/lẻ mà luồng chương trình chia thành 2 nhánh là 2 vòng lặp có nội dung xử lý khác nhau. Cả 2 hàm này đều có cùng số lần lặp, nếu mọi người trace từ dưới lên như mình nhắc trên, ta thấy được rằng điều kiện nhảy tới `LABEL_40` ở đây là biến đếm `v6` < `strlen(v3)`, trace theo `v3`, ta thấy `v3`~`v1`~`a1`, `a1` mà là input.
+
+![alt text](_IMG/image-37.png)
+
+- Trước khi chương trình nhảy vào xử lý đã check độ dài của `v1` ~ `a1` là 44. Vậy số lần lặp của 2 vòng lặp trong này `là Input.len()` == 44.
+
+![alt text](_IMG/image-38.png)
+
+- Dưới đây là khung chương trình mô phỏng tóm tắt cho những gì mình phân tích trên.
+
+```C
+if input.len() == 44
+{
+  for (j : 24)
+    if (j & 1 != 0)
+      for(v6 : 44)
+      {
+        // encrypt_even
+      }
+    else
+      for(v6 : 44)
+      {
+        //encrypt_odd
+      }
+}
+```
+
+- Tiến tới khối chương trình mà mình tạm gọi là `encrypt_even` trên, luồng xử lý này lại tiếp tục rẽ nhánh bằng cách kiểm tra `v31 % 3 == 0,1,2`(trong scrypt bên dưới của mình là `v32`). Trong các nhánh này đều là các phép toán cộng, trừ, xor cơ bản. Nhánh `encrypt_odd` cũng là tương tự.
+
+![alt text](_IMG/image-39.png)
+
+- Ta bổ sung khung chương trình như sau:
+
+```C
+v31 = 0
+if input.len() == 44
+{
+  for (j : 24)
+    if (j & 1 != 0)
+      for(v6 : 44)
+      {
+        // encrypt_even
+        if (v31 % 3 == 0):
+          // execute1
+        elif ((v31 % 3) - 1) == 1:
+          // execute2
+        else
+          // execute3
+        v31++
+      }
+    else
+      for(v6 : 44)
+      {
+        //encrypt_odd
+        if (v31 % 3 == 0):
+          // execute1
+        elif ((v31 % 3) - 1) == 1:
+          // execute2
+        else
+          // execute3
+        v31++
+      }
+}
+```
+
+- Giờ thì chỉ còn buớc rev lại các phép toán cuối cùng trong hàm mã hóa thôi. Nhớ rằng phải `&0xff` bởi giá trị cuối được gán vào là `Input[]` có kiểu dữ liệu `_BYTE`.
+
 - rev hết đống này mình mất nửa ngày @@.
 
 ```python
@@ -933,7 +1012,6 @@ if s.check() == sat:
     print(s.model())
 else:
     print('Fail')
-
 ```
 
 ![alt text](_IMG/image-34.png)
