@@ -451,7 +451,9 @@ int MainProcess()
 
 ![alt text](_IMG/image-26.png)
 
-- Nhảy tới thì thấy hàm được resolve ra khá quen thuộc trong việc thực hiện `dll injection`. Vậy thì có thể khẳng định rằng chương trình thực hiện tải từ trên mạng về 1 file dll tại đường dẫn ở trên, sau đó lưu tại `C:\Users\ADMINZ\AppData\Local\Temp\` với cái tên `"KCSC.dll"` rồi thực hiện inject nó vào chương trình.
+- Nhảy tới thì thấy hàm được resolve ra khá quen thuộc, nó dùng để lấy ra address của `LoadLibary` nhằm load con dll tải về trước đó vào chương trình.
+
+- Tổng quan về những gì đã phân tích, chương trình thực hiện tải từ trên mạng về 1 file dll tại đường dẫn ở trên, sau đó lưu tại `C:\Users\ADMINZ\AppData\Local\Temp\` với cái tên `"KCSC.dll"` và load nó vào chương trình.
 
 ![alt text](_IMG/image-27.png)
 
