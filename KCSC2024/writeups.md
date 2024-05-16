@@ -732,11 +732,11 @@ LABEL_41:
 
 ![alt text](_IMG/image-36.png)
 
-- Sau đó, dựa vào v4 là chẵn/lẻ mà luồng chương trình chia thành 2 nhánh là 2 vòng lặp có nội dung xử lý khác nhau. Cả 2 hàm này đều có cùng số lần lặp, nếu mọi người trace từ dưới lên như mình nhắc trên, ta thấy được rằng điều kiện nhảy tới `LABEL_40` ở đây là biến đếm `v6` < `strlen(v3)`, trace theo `v3`, ta thấy `v3`~`v1`~`a1`, `a1` mà là input.
+- Sau đó, dựa vào v4 là chẵn/lẻ mà luồng chương trình chia thành 2 nhánh là 2 vòng lặp có nội dung xử lý khác nhau. Cả 2 hàm này đều có cùng số lần lặp, nếu mọi người trace từ dưới lên như mình nhắc trên, ta thấy được rằng điều kiện nhảy tới `LABEL_40` ở đây là biến đếm `v6` < `strlen(v3)`, trace theo `v3`, ta thấy `v3` = `v1` = `a1`, mà `a1` là input.
 
 ![alt text](_IMG/image-37.png)
 
-- Trước khi chương trình nhảy vào xử lý đã check độ dài của `v1` ~ `a1` là 44. Vậy số lần lặp của 2 vòng lặp trong này `là Input.len()` == 44.
+- Trước khi chương trình nhảy vào xử lý đã check độ dài của `v1` ~ `a1` là 44. Vậy số lần lặp của 2 vòng lặp trong này là `Input.len()` == 44.
 
 ![alt text](_IMG/image-38.png)
 
