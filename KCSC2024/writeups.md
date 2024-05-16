@@ -461,7 +461,7 @@ int MainProcess()
 
 ![alt text](_IMG/image-28.png)
 
-- Tới đoạn chương trình được inject vào. ta có một hàm kiểm tra như dưới.
+- Tới đoạn chương trình được load vào. ta có một hàm kiểm tra như dưới.
 
 ![alt text](_IMG/image-29.png)
 
