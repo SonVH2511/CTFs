@@ -728,7 +728,7 @@ LABEL_41:
 
 - Biện pháp ở đây là mình trace ngược lại từ `LABEL_41` bởi các tác vụ xử lý của LABEL này là kiểm tra output sau khi mã hóa với `target[]` là `v27`.
 
-- Lại kéo lên để tiến vào các hàm xử lý bên trong, ta thấy trong hàm xử lý đầu xuất hiện trước tiên là lệnh kiểm tra chẵn lẻ biến `v4`. Sau khi debug lại nhiều lần thì mình kết luận `v4` ~ `v1`, mọi người hoàn toàn có thể đưa chuột vào và thấy `v1`~`eax`, `v4`~`al`.
+- Lại kéo lên để tiến vào các hàm xử lý bên trong, ta thấy trong hàm xử lý đầu xuất hiện trước tiên là lệnh kiểm tra chẵn lẻ biến `v4`. Sau khi debug lại nhiều lần thì mình kết luận `v4` ~ `v1`, mọi người hoàn toàn có thể đưa chuột vào và thấy `v1` = `eax`, `v4` = `al`.
 
 ![alt text](_IMG/image-36.png)
 
