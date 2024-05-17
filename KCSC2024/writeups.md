@@ -140,11 +140,11 @@ flag: KCSC{1t_co5ld_be_right7_fla9_here_^.^@@}
 
 - Nếu mọi người cần phân tích kĩ hơn thì, dễ thấy được trong quá trình debug rằng `*(_QWORD *)&v9.gap0[8]` là một `interator` để duyệt `input` xuyên suốt vòng `while()`. `v3` = `v5` - vị trí hiện tại. `v5` = `Input.len()` - 1. Ở dòng 40, `Input.data` tại vị trí `interator` trỏ tới, được gán bằng `Input.data[v3]`.
 
-- Dễ hiểu hơn là: `Input[i] = Input[Input.len() - 1]`.
+- Dễ hiểu hơn là: `Input[i] = Input[Input.len() - 1 - i]`.
 
 - Sau đó, tại dòng 46 có một phép gán tương tự, `v2`~`Input.length - 1 - v6`, `v6 = *(_QWORD *)&v9.gap0[8]`. `v4 = Input.data_ptr[*(_QWORD *)&v9.gap0[8]]`.
 
-- Tức là: `Input[Input.len() - 1] = Input[i]`.
+- Tức là: `Input[Input.len() - 1 - i] = Input[i]`.
 
 - `Phase` này hoàn toàn có thể truyền ngược input vào để lấy được chuỗi gốc nên không cần rev. Dưới đây là script mô phỏng cho phase1.
 
