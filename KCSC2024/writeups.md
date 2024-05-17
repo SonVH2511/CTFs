@@ -500,84 +500,84 @@ int __cdecl kcsc_HelloWorld(int a1)
   int v31; // [esp+30h] [ebp-5ECh]
   char v32; // [esp+37h] [ebp-5E5h]
   const char *v33; // [esp+38h] [ebp-5E4h]
-  __int128 v34[69]; // [esp+3Ch] [ebp-5E0h]
+  __int128 Cipher[69]; // [esp+3Ch] [ebp-5E0h]
   int v35; // [esp+48Ch] [ebp-190h]
   __int16 v36; // [esp+490h] [ebp-18Ch]
   char v37[390]; // [esp+492h] [ebp-18Ah] BYREF
 
   if ( ucrtbase_strncmp(a1, "de(RYpt3d_bu", 0xCu) )
     return 0;
-  v34[0] = xmmword_629E3360;
-  v34[1] = xmmword_629E3510;
-  v34[2] = xmmword_629E3430;
-  v34[3] = xmmword_629E3370;
-  v34[4] = xmmword_629E32B0;
-  v34[5] = xmmword_629E34A0;
-  v34[6] = xmmword_629E32D0;
-  v34[7] = xmmword_629E3200;
-  v34[8] = xmmword_629E3260;
-  v34[9] = xmmword_629E3520;
-  v34[10] = xmmword_629E33F0;
-  v34[11] = xmmword_629E32C0;
-  v34[12] = xmmword_629E32A0;
-  v34[13] = xmmword_629E31F0;
-  v34[14] = xmmword_629E34D0;
-  v34[15] = xmmword_629E3160;
-  v34[16] = xmmword_629E33B0;
-  v34[17] = xmmword_629E3140;
-  v34[18] = xmmword_629E3170;
-  v34[19] = xmmword_629E3490;
-  v34[20] = xmmword_629E30C0;
-  v34[21] = xmmword_629E33C0;
-  v34[22] = xmmword_629E3440;
-  v34[23] = xmmword_629E3110;
-  v34[24] = xmmword_629E3480;
-  v34[25] = xmmword_629E3320;
-  v34[26] = xmmword_629E3450;
-  v34[27] = xmmword_629E3500;
-  v34[28] = xmmword_629E34B0;
-  v34[29] = xmmword_629E3460;
-  v34[30] = xmmword_629E33D0;
-  v34[31] = xmmword_629E34E0;
-  v34[32] = xmmword_629E3130;
-  v34[33] = xmmword_629E3120;
-  v34[34] = xmmword_629E3230;
-  v34[35] = xmmword_629E33A0;
-  v34[36] = xmmword_629E30F0;
-  v34[37] = xmmword_629E3350;
-  v34[38] = xmmword_629E3190;
-  v34[39] = xmmword_629E3150;
-  v34[40] = xmmword_629E32E0;
-  v34[41] = xmmword_629E3210;
-  v34[42] = xmmword_629E31C0;
+  Cipher[0] = xmmword_629E3360;
+  Cipher[1] = xmmword_629E3510;
+  Cipher[2] = xmmword_629E3430;
+  Cipher[3] = xmmword_629E3370;
+  Cipher[4] = xmmword_629E32B0;
+  Cipher[5] = xmmword_629E34A0;
+  Cipher[6] = xmmword_629E32D0;
+  Cipher[7] = xmmword_629E3200;
+  Cipher[8] = xmmword_629E3260;
+  Cipher[9] = xmmword_629E3520;
+  Cipher[10] = xmmword_629E33F0;
+  Cipher[11] = xmmword_629E32C0;
+  Cipher[12] = xmmword_629E32A0;
+  Cipher[13] = xmmword_629E31F0;
+  Cipher[14] = xmmword_629E34D0;
+  Cipher[15] = xmmword_629E3160;
+  Cipher[16] = xmmword_629E33B0;
+  Cipher[17] = xmmword_629E3140;
+  Cipher[18] = xmmword_629E3170;
+  Cipher[19] = xmmword_629E3490;
+  Cipher[20] = xmmword_629E30C0;
+  Cipher[21] = xmmword_629E33C0;
+  Cipher[22] = xmmword_629E3440;
+  Cipher[23] = xmmword_629E3110;
+  Cipher[24] = xmmword_629E3480;
+  Cipher[25] = xmmword_629E3320;
+  Cipher[26] = xmmword_629E3450;
+  Cipher[27] = xmmword_629E3500;
+  Cipher[28] = xmmword_629E34B0;
+  Cipher[29] = xmmword_629E3460;
+  Cipher[30] = xmmword_629E33D0;
+  Cipher[31] = xmmword_629E34E0;
+  Cipher[32] = xmmword_629E3130;
+  Cipher[33] = xmmword_629E3120;
+  Cipher[34] = xmmword_629E3230;
+  Cipher[35] = xmmword_629E33A0;
+  Cipher[36] = xmmword_629E30F0;
+  Cipher[37] = xmmword_629E3350;
+  Cipher[38] = xmmword_629E3190;
+  Cipher[39] = xmmword_629E3150;
+  Cipher[40] = xmmword_629E32E0;
+  Cipher[41] = xmmword_629E3210;
+  Cipher[42] = xmmword_629E31C0;
   v35 = 1691263788;
-  v34[43] = xmmword_629E3270;
+  Cipher[43] = xmmword_629E3270;
   v36 = 20889;
-  v34[44] = xmmword_629E3330;
-  v34[45] = xmmword_629E33E0;
-  v34[46] = xmmword_629E3290;
-  v34[47] = xmmword_629E32F0;
-  v34[48] = xmmword_629E34F0;
-  v34[49] = xmmword_629E3240;
-  v34[50] = xmmword_629E3380;
-  v34[51] = xmmword_629E31D0;
-  v34[52] = xmmword_629E3340;
-  v34[53] = xmmword_629E3400;
-  v34[54] = xmmword_629E3220;
-  v34[55] = xmmword_629E31A0;
-  v34[56] = xmmword_629E3180;
-  v34[57] = xmmword_629E3420;
-  v34[58] = xmmword_629E34C0;
-  v34[59] = xmmword_629E3250;
-  v34[60] = xmmword_629E3280;
-  v34[61] = xmmword_629E31B0;
-  v34[62] = xmmword_629E3410;
-  v34[63] = xmmword_629E3300;
-  v34[64] = xmmword_629E30E0;
-  v34[65] = xmmword_629E30D0;
-  v34[66] = xmmword_629E3100;
-  v34[67] = xmmword_629E3390;
-  v34[68] = xmmword_629E3310;
+  Cipher[44] = xmmword_629E3330;
+  Cipher[45] = xmmword_629E33E0;
+  Cipher[46] = xmmword_629E3290;
+  Cipher[47] = xmmword_629E32F0;
+  Cipher[48] = xmmword_629E34F0;
+  Cipher[49] = xmmword_629E3240;
+  Cipher[50] = xmmword_629E3380;
+  Cipher[51] = xmmword_629E31D0;
+  Cipher[52] = xmmword_629E3340;
+  Cipher[53] = xmmword_629E3400;
+  Cipher[54] = xmmword_629E3220;
+  Cipher[55] = xmmword_629E31A0;
+  Cipher[56] = xmmword_629E3180;
+  Cipher[57] = xmmword_629E3420;
+  Cipher[58] = xmmword_629E34C0;
+  Cipher[59] = xmmword_629E3250;
+  Cipher[60] = xmmword_629E3280;
+  Cipher[61] = xmmword_629E31B0;
+  Cipher[62] = xmmword_629E3410;
+  Cipher[63] = xmmword_629E3300;
+  Cipher[64] = xmmword_629E30E0;
+  Cipher[65] = xmmword_629E30D0;
+  Cipher[66] = xmmword_629E3100;
+  Cipher[67] = xmmword_629E3390;
+  Cipher[68] = xmmword_629E3310;
   ((void (__cdecl *)(char *, _DWORD, int))unk_629E2371)(v37, 0, 390);
   v27[0] = xmmword_629E3470;
   v27[1] = xmmword_629E31E0;
@@ -615,7 +615,7 @@ int __cdecl kcsc_HelloWorld(int a1)
               v16 = v7;
               if ( v6 != v15 - (_DWORD)(v3 + 1) - 1 )
                 v16 = v3[v6 + 1];
-              v3[v6] ^= v16 - *((_BYTE *)v34 + v2);
+              v3[v6] ^= v16 - *((_BYTE *)Cipher + v2);
               goto LABEL_19;
             }
             v13 = v12 - 1;
@@ -625,9 +625,9 @@ int __cdecl kcsc_HelloWorld(int a1)
             {
               v33 = v3 + 1;
               if ( v6 == strlen(v3) - 1 )
-                v3[v6] = v7 + *((_BYTE *)v34 + v2) - v3[v6];
+                v3[v6] = v7 + *((_BYTE *)Cipher + v2) - v3[v6];
               else
-                v3[v6] = *((_BYTE *)v34 + v2) + v3[v6 + 1] - v3[v6];
+                v3[v6] = *((_BYTE *)Cipher + v2) + v3[v6 + 1] - v3[v6];
 LABEL_19:
               ++v2;
             }
@@ -640,9 +640,9 @@ LABEL_19:
           }
           v33 = v3 + 1;
           if ( v6 == strlen(v3) - 1 )
-            v14 = v7 ^ *((_BYTE *)v34 + v2);
+            v14 = v7 ^ *((_BYTE *)Cipher + v2);
           else
-            v14 = *((_BYTE *)v34 + v2) ^ v3[v6 + 1];
+            v14 = *((_BYTE *)Cipher + v2) ^ v3[v6 + 1];
           v3[v6] += v14;
           goto LABEL_19;
         }
@@ -668,10 +668,10 @@ LABEL_40:
       {
         if ( !v6 )
         {
-          v5 = *v3 ^ *((_BYTE *)v34 + v2);
+          v5 = *v3 ^ *((_BYTE *)Cipher + v2);
           goto LABEL_36;
         }
-        v23 = v3[v6] ^ (v3[v6 - 1] - *((_BYTE *)v34 + v2));
+        v23 = v3[v6] ^ (v3[v6 - 1] - *((_BYTE *)Cipher + v2));
         goto LABEL_35;
       }
       v22 = v21 - 1;
@@ -681,12 +681,12 @@ LABEL_40:
       {
         if ( !v6 )
         {
-          v5 = *v3 - *((_BYTE *)v34 + v2);
+          v5 = *v3 - *((_BYTE *)Cipher + v2);
 LABEL_36:
           ++v2;
           goto LABEL_37;
         }
-        v23 = v3[v6 - 1] + *((_BYTE *)v34 + v2) - v3[v6];
+        v23 = v3[v6 - 1] + *((_BYTE *)Cipher + v2) - v3[v6];
         goto LABEL_35;
       }
 LABEL_37:
@@ -701,10 +701,10 @@ LABEL_37:
     }
     if ( !v6 )
     {
-      v5 = *v3 + *((_BYTE *)v34 + v2);
+      v5 = *v3 + *((_BYTE *)Cipher + v2);
       goto LABEL_36;
     }
-    v23 = v3[v6] + (v3[v6 - 1] ^ *((_BYTE *)v34 + v2));
+    v23 = v3[v6] + (v3[v6 - 1] ^ *((_BYTE *)Cipher + v2));
 LABEL_35:
     v3[v6 - 1] = v5;
     v5 = v23;
@@ -828,7 +828,7 @@ for j in range(_24):
             if _mod3 == 0:
                 # if i == _len-1:
                 # v7 = Input[i]
-                # v34 = Input[v6+1]
+                # Cipher = Input[v6+1]
                 if v6 != _len-1:
                     # print(v6)
                     # print(Input[v6+1])
@@ -954,7 +954,7 @@ for j in range(_24):
             if _mod3 == 0:
                 # if i == _len-1:
                 # v7 = Input[i]
-                # v34 = Input[v6+1]
+                # Cipher = Input[v6+1]
                 if v6 != _len-1:
                     # print(v6)
                     # print(Input[v6+1])
