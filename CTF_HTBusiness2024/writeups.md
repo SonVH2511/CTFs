@@ -1,6 +1,6 @@
 ## CTFs/HackTheBox_Bussiness2024
 
-- Vẫn là giải hàng tuần nhưng với tư cách mới^^.
+- Vẫn là giải hàng tuần nhưng đây là giải đầu tiên mình đồng hành cùng clb với tư cách mới^^.
 
 ### rev_flagCasino
 
