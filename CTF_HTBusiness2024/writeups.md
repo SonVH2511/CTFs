@@ -292,9 +292,13 @@ flag: HTB{tunn3l1ng_ab0ut_in_3d_01b23521afc8c7b30d9f8e66002d8ad1}
 
 ### rev_satelliteHijack
 
-- Chall
+- Chall: [satellite](rev_satellitehijack/rev_satellitehijack/satellite), [library.so](rev_satellitehijack/rev_satellitehijack/library.so)
+
+- Thực thi chương trình, và đối chiếu với mã giả. Ta thấy hoàn toàn không có gì. Tất cả chỉ là nhập vào input.
 
 ![alt text](_IMG/image-12.png)
+
+- giờ mình ra ngoài có việc nên Chall này mai mình viết tiếp nhé^^.
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
