@@ -6,13 +6,13 @@
 
 - Lại là `random`@@. Chương trình thực hiện nhận `input` từng kí tự một và dùng nó làm `seed` rồi thực hiện so sánh `rand()` với `check[]` là mảng có sẵn.
 
-  ![alt text](image.png)
+  ![alt text](_IMG/image.png)
 
 - Ý tưởng để xử lý bài này là vét cạn các giá trị `input` bởi đầu vào nhận kiểu dữ liệu byte nên việc vét trong khoảng `0-0xff` hoàn toàn không khó khăn gì.
 
 - Nếu có gì cần phải lưu ý thì, chall này là một file `ELF`, nên ta sẽ phải chạy script trong `linux` để output của `rand()` tương đồng với chương trình.
 
-![alt text](image-1.png)
+![alt text](_IMG/image-1.png)
 
 - Dưới đây là `script` vét input.
 
@@ -41,7 +41,7 @@ int main()
 }
 ```
 
-![alt text](image-2.png)
+![alt text](_IMG/image-2.png)
 
 ```
 flag: HTB{r4nd_1s_v3ry_pr3d1ct4bl3}
@@ -53,11 +53,11 @@ flag: HTB{r4nd_1s_v3ry_pr3d1ct4bl3}
 
 - Một chall rust tag easy, không có gì khó khăn bởi thậm chí hàm checkflag còn được chỉ ra khá rõ ràng.
 
-![alt text](image-3.png)
+![alt text](_IMG/image-3.png)
 
 - Thực hiện debug động và nhặt ra từng phần tử của flag một sau các hàm `gen`.
 
-![alt text](image-4.png)
+![alt text](_IMG/image-4.png)
 
 ```
 flag: HTB{d0nt_p4n1c_c4tch_the_3rror}
@@ -69,7 +69,7 @@ flag: HTB{d0nt_p4n1c_c4tch_the_3rror}
 
 - Chall này hơi khó hiểu. 2 file `js` và `json` tưởng rằng là thứ cần xem xét kĩ hơn thì lại không có thông tin gì. Flag lại nằm trong file còn lại, thậm chí đọc strings để lấy flag.
 
-![alt text](image-5.png)
+![alt text](_IMG/image-5.png)
 
 ```python
 ans = [72, 84, 66, 123, 98, 52, 99, 107, 100, 48, 48, 114, 95, 49, 110, 95,
@@ -90,7 +90,7 @@ flag: HTB{b4ckd00r_1n_y0ur_sn4psh07!!}
 
 - Sơ bộ về chương trình, ta cần nhập các truy vấn tương ứng với các hướng di chuyển là `L/R/F/B/U/D/Q`. Chương trình thực hiện tính toán và di chuyển trên map và check vị trí cần đến, nếu đúng thì trả ra flag. Chall này cần connect sever và nhập truy vấn nhằm lấy flag, nên không có gì để xem xét trong hàm `get_flag()`.
 
-![alt text](image-6.png)
+![alt text](_IMG/image-6.png)
 
 - Đi vào phân tích hàm `move()`. Từ những kí tự viết tắt, ta dễ dàng suy luận được ra đây là một map 3 chiều khi có thêm các hướng đi trong không gian(Front/Back).
 
@@ -205,19 +205,40 @@ LABEL_33:
 
 - Xem xét một chút, ta có thể thấy giá trị trong map tương ứng với `tường/chướngngạivật` là `2` khi giá trị tại vị trí di chuyển tới tương đương thì sẽ phải nhảy tới thông báo `"Cannot move that way"`. Điều tương tự với số `19`.
 
-![alt text](image-7.png)
+![alt text](_IMG/image-7.png)
 
 - Quay ra xem hàm `checkPos()`. Hàm này thực hiện tính vị trí hiện tại với tọa độ hiện tại `pos[3]` ~ `(x,y,z)`
 
-![alt text](image-8.png)
+![alt text](_IMG/image-8.png)
 
 - Tiếp tới `map`, ta thấy được rằng vị trí cần đến có giá trị là `3`. Tuy nhiên, khi đọc sơ qua giá trị của `maze`, ta lại thấy có khá nhiều tọa độ có giá trị `3`.
 
-![alt text](image-9.png)
+![alt text](_IMG/image-9.png)
 
 - Nhưng khi duyệt cả mảng maze để lọc ra vị trí được tính theo công thức + 12 == 3 thì chỉ có 1. Là vị trí cuối cùng trong ma trận này, cũng được tính với công thức `maze[6400*19 + 320*19 + 16*19 +12 = 127996]`.
 
-![alt text](image-10.png)
+![alt text](_IMG/image-10.png)
+
+- script `python ida` để đọc maze từ `ida`.
+
+```python
+# print(e-s)
+
+import idaapi
+import idc
+import ida_bytes
+
+def read_memory(address, length):
+    data = ida_bytes.get_bytes(address, length)
+    if data is None:
+        print(f"Failed to read data from address 0x{address:08X}")
+    return data
+
+s = 0x00000000000020E0
+e = 0x00000000000214DF
+
+print(read_memory(s, e-s+1))
+```
 
 - Tới đây mình đi tìm hiểu hàm trong chương trình 1 lúc rồi thực hiện duyệt đường đi và lưu lại đường chuẩn với `dfs` như dưới đây.
 
@@ -263,7 +284,7 @@ for i in ans:
 
 - Duyệt xong mới thấy là bài này chỉ có 1 đường đi duy nhất, vậy thì ai ~~vũ phu~~vét cạn chút cũng solve được bởi max nước đi chỉ rơi vào khoảng 19\*3 như đã đề cập trên :v
 
-![alt text](image-11.png)
+![alt text](_IMG/image-11.png)
 
 ```
 flag: HTB{tunn3l1ng_ab0ut_in_3d_01b23521afc8c7b30d9f8e66002d8ad1}
@@ -273,7 +294,7 @@ flag: HTB{tunn3l1ng_ab0ut_in_3d_01b23521afc8c7b30d9f8e66002d8ad1}
 
 - Chall
 
-![alt text](image-12.png)
+![alt text](_IMG/image-12.png)
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
