@@ -1,5 +1,7 @@
 ## CTFs/HackTheBox_Bussiness2024
 
+- Vẫn là giải hàng tuần nhưng với tư cách mới^^.
+
 ### rev_flagCasino
 
 - Chall: [casino](rev_flagcasino/casino)
@@ -240,7 +242,17 @@ e = 0x00000000000214DF
 print(read_memory(s, e-s+1))
 ```
 
-- Tới đây mình đi tìm hiểu hàm trong chương trình 1 lúc rồi thực hiện duyệt đường đi và lưu lại đường chuẩn với `dfs` như dưới đây.
+- Tới đây mình đi tìm hiểu hàm trong chương trình 1 lúc để quan sát giá trị được tăng thêm khi di chuyển và có kết luận tương ứng rằng:
+
+```
+pos[0] = 'R','L'
+pos[1] = 'F','B'
+pos[2] = 'U','D'
+```
+
+- Vị trí được tính theo tổng các bộ giá trị {6400, 320, 16} nhân với tọa độ tương ứng. Vậy mỗi khi di chuyển ta có thể tính ra vị trí của chúng bằng cách cộng thêm giá trị tương ứng với truy vấn đã nhập vào tổng giá trị cho đến khi bằng `127996-12`.
+
+- Thực hiện duyệt đường đi và lưu lại đường chuẩn với `dfs` như dưới đây.
 
 ```python
 maze=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0...]
