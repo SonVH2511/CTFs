@@ -252,7 +252,7 @@ pos[2] = 'U','D' = +16,-16
 
 - Vị trí được tính theo tổng các bộ giá trị {6400, 320, 16} nhân với tọa độ tương ứng. Vậy mỗi khi di chuyển ta có thể tính ra vị trí của chúng bằng cách cộng thêm giá trị tương ứng với truy vấn đã nhập vào tổng giá trị cho đến khi bằng `127996-12`.
 
-- Tóm lại, chương trình thực hiện di chuyển từ vị trí `maze[0]` đến `maze[127996-12]` với chướng ngại có giá trị là `2` và `19`. Các cách di chuyển là `[Right,Left,Front,Back,Up,Down]` tương ứng với các giá trị `[6400,320,16,-6400,-320,-16]` tương ứng.
+- Tóm lại, chương trình thực hiện di chuyển từ vị trí `maze[0]` đến `maze[127996-12]` với chướng ngại có giá trị là `2` và `19`. Các cách di chuyển là `[Right,Left,Front,Back,Up,Down]` tương ứng với các giá trị `[6400,320,16,-6400,-320,-16]`.
 
 - Thực hiện duyệt đường đi và lưu lại đường chuẩn bằng `dfs` như dưới đây.
 
@@ -350,7 +350,7 @@ for i in range(len(enc)):
     print(chr(ord(enc[i]) ^ i), end="")
 ```
 
-- Thu được đuôi flag như dưới, nhảy ra ngoài thì mình thấy bên cạnh hàm checkflag thì còn một lệnh kiểm tra `v7`(giá trị được truyền vào hàm checkflag) với chuỗi hexa `0x7B425448`, convert sang char thì thu được phần đầu^^.
+- Thu được đuôi flag như dưới, nhảy ra ngoài thì mình thấy bên cạnh hàm checkflag thì còn một lệnh kiểm tra `v7`(giá trị được truyền vào hàm checkflag) với chuỗi hex `0x7B425448`, convert sang char thì thu được phần đầu^^.
 
 ![alt text](_IMG/image-21.png)
 ![alt text](_IMG/image-22.png)
