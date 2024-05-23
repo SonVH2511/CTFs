@@ -217,7 +217,7 @@ LABEL_33:
 
 ![alt text](_IMG/image-9.png)
 
-- Nhưng khi duyệt cả mảng maze để lọc ra vị trí được tính theo công thức + 12 == 3 thì chỉ có 1. Là vị trí cuối cùng trong ma trận này, cũng được tính với công thức `maze[6400*19 + 320*19 + 16*19 +12 = 127996]`.
+- Nhưng khi duyệt cả mảng maze để lọc ra vị trí được tính theo công thức + 12 == 3 thì chỉ có 1. Là vị trí cuối cùng trong ma trận này, cũng được tính với công thức `maze[6400*19 + 320*19 + 16*19 + 12 = 127996]`.
 
 ![alt text](_IMG/image-10.png)
 
