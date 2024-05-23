@@ -245,14 +245,16 @@ print(read_memory(s, e-s+1))
 - Tới đây mình đi tìm hiểu hàm trong chương trình 1 lúc để quan sát giá trị được tăng thêm khi di chuyển và có kết luận tương ứng rằng:
 
 ```
-pos[0] = 'R','L'
-pos[1] = 'F','B'
-pos[2] = 'U','D'
+pos[0] = 'R','L' = +6400,-6400
+pos[1] = 'F','B' = +320,-320
+pos[2] = 'U','D' = +16,-16
 ```
 
 - Vị trí được tính theo tổng các bộ giá trị {6400, 320, 16} nhân với tọa độ tương ứng. Vậy mỗi khi di chuyển ta có thể tính ra vị trí của chúng bằng cách cộng thêm giá trị tương ứng với truy vấn đã nhập vào tổng giá trị cho đến khi bằng `127996-12`.
 
-- Thực hiện duyệt đường đi và lưu lại đường chuẩn với `dfs` như dưới đây.
+- Tóm lại, chương trình thực hiện di chuyển từ vị trí `maze[0]` đến `maze[127996-12]` với chướng ngại có giá trị là `2` và `19`. Các cách di chuyển là `[Right,Left,Front,Back,Up,Down]` tương ứng với các giá trị `[6400,320,16,-6400,-320,-16]` tương ứng.
+
+- Thực hiện duyệt đường đi và lưu lại đường chuẩn bằng `dfs` như dưới đây.
 
 ```python
 maze=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0...]
@@ -334,7 +336,7 @@ flag: HTB{tunn3l1ng_ab0ut_in_3d_01b23521afc8c7b30d9f8e66002d8ad1}
 
 ![alt text](_IMG/image-18.png)
 
-- Có vẻ là vậy, sau khi `makefunction()` thì thu được mã giả khá clean như dưới.
+- Có vẻ là vậy, sau khi `makefunction` thì thu được mã giả khá clean như dưới.
 
 ![alt text](_IMG/image-19.png)
 
