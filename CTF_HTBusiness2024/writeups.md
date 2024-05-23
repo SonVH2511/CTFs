@@ -296,7 +296,7 @@ for i in ans:
             print("'"+move[j]+"'", end=", ")
 ```
 
-- Duyệt xong mới thấy là bài này chỉ có 1 đường đi duy nhất, vậy thì ai ~~vũ phu~~vét cạn chút cũng solve được bởi max nước đi chỉ rơi vào khoảng 19\*3 như đã đề cập trên :v
+- Duyệt xong mới thấy là bài này chỉ có 1 đường đi duy nhất, vậy thì ai ~~vũ phu~~vét cạn chút cũng solve được bởi max nước đi chỉ rơi vào khoảng 19\*3\*6 như đã đề cập trên :v
 
 ![alt text](_IMG/image-11.png)
 
