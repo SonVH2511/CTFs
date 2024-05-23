@@ -306,11 +306,56 @@ flag: HTB{tunn3l1ng_ab0ut_in_3d_01b23521afc8c7b30d9f8e66002d8ad1}
 
 - Chall: [satellite](rev_satellitehijack/rev_satellitehijack/satellite), [library.so](rev_satellitehijack/rev_satellitehijack/library.so)
 
-- Thực thi chương trình, và đối chiếu với mã giả. Ta thấy hoàn toàn không có gì. Tất cả chỉ là nhập vào input.
+- Thực thi chương trình, và đối chiếu với mã giả. Ta thấy hoàn toàn không có gì. Tất cả chỉ là nhập vào input, rồi trả ra thông báo `Sending + input`.
 
 ![alt text](_IMG/image-12.png)
 
-- giờ mình ra ngoài có việc nên Chall này mai mình viết tiếp nhé^^.
+- Trong chương trình cũng không có gì đặc biệt.
+
+![alt text](image-13.png)
+
+- Tuy nhiên có 2 hàm `send_satellite_message()` định nghĩa ở ngoài chương trình được gọi ra cũng khiến mình hơi nghi ngờ, bởi còn 1 thứ ta chưa đề cập tới là file thư viện `library.so` còn lại.
+
+![alt text](image-14.png)
+
+- Thực hiện debug động để tìm hiểu sâu vào hàm `send_satellite_message()`. Đúng như dự đoán, hàm `send_satellite_message()` được gọi ra từ file thư viện kia.
+
+![alt text](image-15.png)
+
+- Sau 1 vài lần debug và đối chiếu dựa trên opcode của các hàm trong thư viện với trong file thực thi thì mình makefunction nó lại tựa như nhau.
+
+![alt text](image-16.png)
+
+- Quan sát thì, mình thấy hàm ở luồng `true` thực thi lệnh kiểm tra điều kiện luôn bị nhảy qua nên mình sẽ nhảy vào và kiểm tra một chút. Theo dõi trên hàm tương ứng trong file `lib`, ta thấy rằng chương trình có thao tác với chuỗi giá trị `"read"`.
+
+![alt text](image-17.png)
+
+- Mình thấy có khả năng là đang thực hiện ghi đè hàm `read()` được gọi trong `main()`. Nên nhảy vào hàm này sau khi chạy đoạn chương trình trên.
+
+![alt text](image-18.png)
+
+- Có vẻ là vậy, sau khi `makefunction()` thì thu được mã giả khá clean như dưới.
+
+![alt text](image-19.png)
+
+- Đọc từng hàm được gọi ra trong đoạn chương trình này thì thấy hàm `sub_7F5C65EC108C()` khá giống hàm checkflag, viết script gen lại flag
+
+![alt text](image-20.png)
+
+```python
+enc = "l5{0v0Y7fVf?u>|:O!|Lx!o$j,;f"
+for i in range(len(enc)):
+    print(chr(ord(enc[i]) ^ i), end="")
+```
+
+- Thu được đuôi flag như dưới, nhảy ra ngoài thì mình thấy bên cạnh hàm checkflag thì còn một lệnh kiểm tra `v7`(giá trị được truyền vào hàm checkflag) với chuỗi hexa `0x7B425448`, convert sang char thì thu được phần đầu^^.
+
+![alt text](image-21.png)
+![alt text](image-22.png)
+
+```
+flag: HTB{l4y3r5_0n_l4y3r5_0n_l4y3r5!}
+```
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
