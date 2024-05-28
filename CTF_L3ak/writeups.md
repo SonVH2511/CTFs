@@ -8,18 +8,18 @@
 
 - Chương trình yêu cầu ta truyền thêm `argv` để thực thi theo đúng flow. Cụ thể là cần truyền vào một file tên myFlag, khi đó chương trình gen ra 1 cửa sổ có những đoạn text với các truy vấn cơ bản như `Up`, `Down`, `Left`, `Right`...
 
-![alt text](image-1.png)
+![alt text](_IMG/image-1.png)
 
 - Load vào `IDA` để phân tích sâu hơn, ta thấy được chương trình thực hiện một số thao tác cơ bản trong quá trình debug như: `check file name`, `read file`, `execute`, `check flag`.
 
-![alt text](image-2.png)
+![alt text](_IMG/image-2.png)
 
 - Từ đây mình cho rằng đây khả năng là một bài giải ma trận, vì cửa sổ được gen ra có các thao tác tương tự các hướng di chuyển và mình cũng nghĩ rằng file truyền vào sẽ là các hướng đi của ta trong ma trận.
 
 - Từ hướng suy nghĩ mình đặt ra ở trên, mình thực hiện debug để tìm kiếm map. Ở đây mình phát hiện rằng chức năng `validate` được trigger bằng phím `Enter` đóng vai trò là checker, thực hiện nhảy vào và debug tiếp.Tới đây thì hàm checker không thể convert sang mã giả được buộc mình phải đọc mã máy.
 
-![alt text](image-4.png)
-![alt text](image-3.png)
+![alt text](_IMG/image-4.png)
+![alt text](_IMG/image-3.png)
 
 - Tuy nhiên mình không tìm thấy thứ gì giống ma trận ở đây. Từ đó mình bỏ qua hàm này và tìm kiếm khắp nơi, nhưng cũng không có kết quả. Mình đã suy nghĩ tới việc file truyền vào mới là map, tuy nhiên điều này cũng hơi vô lý nên mình gạt bỏ ý tưởng này.
 
@@ -29,21 +29,21 @@
 
 - Thậm chí giao diện của file `fdf` trong [video demo](https://www.youtube.com/watch?v=Ov3ljgXXIAQ) còn giống hệt với chall này. Đổi hướng đi, truyền giá trị trong file [42.fdf](Wires/42.fdf) vào myFlag. Khi thực thi thì ta thấy chương trình biểu diễn như dưới.
 
-![alt text](image-5.png)
+![alt text](_IMG/image-5.png)
 
 - Giờ thì mình đã mường tượng ra chương trình làm gì, nó sẽ đọc data từ file `myFlag`, thực hiện biểu diễn lên cửa sổ và bấm `enter` để check.
 
-![alt text](image-6.png)
+![alt text](_IMG/image-6.png)
 
 - Giờ thì mục tiêu của ta là tìm và rev lại được cách convert data từ file của chương trình, đồng thời lấy giá trị từ được mang ra kiểm tra và dịch sang output từ file `convert` được rì vợt.
 
 - Dù hàm check ta nhảy tới sau khi thực hiện truy vấn `enter-validate` không thể dịch sang mã giả như đã đề cập trên, ta thấy không khó để đọc được. Hàm này thực hiện đọc từng dòng một trong nội dung file truyền vào, xóa bỏ khoảng trắng, bỏ xuống dòng(`0xa`), convert char thành int... rồi truyền nó vào một ma trận. Sau đó là duyệt từng khối một trong ma trận(nói là `con trỏ cấp 2` kiểm soát các `con trỏ cấp 1`(mảng 1 chiều) tương ứng với các dòng cho dễ hình dung).
 
-![alt text](image-8.png)
+![alt text](_IMG/image-8.png)
 
 - Dưới đây là nội dung hàm `convert`.
 
-![alt text](image-7.png)
+![alt text](_IMG/image-7.png)
 
 - Khá dễ hiểu, hàm này duyệt mảng chứa nội dung của dòng. Kiểm tra xem `input[i]` có giống với `input[i+1]` hay không. Nếu giống, tiếp tục duyệt tới khi khác/null, và convert sang dạng string với format `ff[hex(số lượng số giống nhau)]ff[hex(input[i])]`.
 
@@ -89,13 +89,13 @@ print()
 
 - Giờ thì mình chạy tới hàm kiểm tra, tuy nhiên ở đây lại chỉ gọi ra 1 giá trị duy nhất là `ff01f4ff00`.
 
-![alt text](image-9.png)
+![alt text](_IMG/image-9.png)
 
 - Chương trình check tương ứng với số dòng của input, tuy nhiên việc check với 1 dải toàn `0` thì cũng chẳng có thông tin gì.
 
 - Với ý tưởng rằng flag hẳn phải ở đâu đó trong chương trình. Mình thử xref giá trị được đem ra so sánh xem có khúc nào bị chèn không nhưng cũng không có thêm thông tin. Sau một hồi thì thấy trong mục strings có khá nhiều giá trị được `encrypt` tại đây.
 
-![alt text](image-10.png)
+![alt text](_IMG/image-10.png)
 
 - Nhặt ra một phần để viết script:
 
@@ -626,7 +626,7 @@ for qq in maybeFlag:
 
 - Quăng output vào `myFlag`, và chạy lại chương trình. Và đây là thành quả 2 ngày mò mẫm^^.
 
-![alt text](image.png)
+![alt text](_IMG/image.png)
 
 ```
 flag: L3AK{42_1s_th3_answer}
