@@ -14,7 +14,7 @@
 
 ![alt text](_IMG/image-2.png)
 
-- Từ đây mình cho rằng đây khả năng là một bài giải ma trận, vì cửa sổ được gen ra có các thao tác tương tự các hướng di chuyển và mình cũng nghĩ rằng file truyền vào sẽ là các hướng đi của ta trong ma trận.
+- Từ đây mình cho rằng đây khả năng là một bài giải ma trận, vì cửa sổ được gen ra có các thao tác tương tự các hướng di chuyển và mình cũng nghĩ rằng file truyền vào sẽ là flag và được convert thành các hướng đi của ta trong ma trận.
 
 - Từ hướng suy nghĩ mình đặt ra ở trên, mình thực hiện debug để tìm kiếm map. Ở đây mình phát hiện rằng chức năng `validate` được trigger bằng phím `Enter` đóng vai trò là checker, thực hiện nhảy vào và debug tiếp.Tới đây thì hàm checker không thể convert sang mã giả được buộc mình phải đọc mã máy.
 
