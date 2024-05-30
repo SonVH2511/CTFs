@@ -1,0 +1,56 @@
+from z3 import *
+
+a1 = [BitVec(f'a1[{i}]', 8) for i in range(37)]
+solver = Solver()
+
+solver.add(a1[0] == 76)
+solver.add(a1[3] == 75)
+solver.add(a1[4] == 123)
+solver.add(a1[2] == 65)
+solver.add(a1[6] == 110)
+solver.add(a1[7] == 103)
+solver.add(a1[8] == 114)
+solver.add(a1[9] == 95)
+solver.add((4 * a1[10]) == 208)
+solver.add(a1[11] == 95)
+solver.add(a1[12] == 108)
+solver.add(a1[18] == 48)
+solver.add(a1[19] == 110)
+solver.add(a1[20] == 116)
+solver.add(a1[22] == 100)
+solver.add(a1[23] == 111)
+solver.add(a1[24] == 95)
+solver.add(a1[27] == 95)
+solver.add(a1[29] == 52)
+solver.add(a1[30] == 110)
+solver.add(a1[33] == 108)
+solver.add(a1[34] == 108)
+solver.add(a1[35] == 121)
+solver.add(a1[36] == 125)
+solver.add(a1[17] == 100)
+solver.add(a1[5] == 97)
+solver.add(a1[15] == 51)
+solver.add(a1[26] == 116)
+
+solver.add((a1[25] - a1[5]) == 8)
+solver.add((a1[33] - a1[1]) == 57)
+solver.add((a1[34] + a1[31]) == 193)
+solver.add((a1[32] + a1[33]) == 160)
+solver.add((a1[21] + a1[28] - a1[25]) == 99)
+solver.add((a1[16] + 51 + a1[14] + 100) == 348)
+solver.add((a1[21] + a1[16] - a1[25]) == 85)
+solver.add(a1[26] != 1)
+solver.add((a1[15] ^ a1[1]) != 65)
+solver.add((a1[17] - a1[32] + a1[33]) == 156)
+solver.add((a1[21] ^ a1[17]) == 59)
+solver.add((a1[1] ^ a1[0] ^ a1[13] ^ a1[2] ^ a1[3]) == 68)
+solver.add((a1[10] & 0xCF) <= 9)
+
+if solver.check() == sat:
+    model = solver.model()
+    print("Solution found:")
+    print(model)
+else:
+    print("No solution found")
+
+# L3AK{angr_4_lif3_d0nt_do_it_m4nU4lly}
