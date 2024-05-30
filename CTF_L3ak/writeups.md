@@ -1,5 +1,89 @@
 ## CTFs/L3akCTF
 
+### Hidden
+
+![alt text](image-12.png)
+
+- -\_-
+
+```
+flag: L3AK{b4by_sT3Ps}
+```
+
+### Angry
+
+- Chall: [angry](Angry/angry_patched_skill_issues)
+
+- Bài này....
+
+- Dù được fix sau vài tiếng khi bắt đầu giải, có vẻ ý định của author là để người chơi phải đoán khi vẫn có những đoạn không thể giải được mà buộc phải guessing để hoàn thiện.
+
+![alt text](image-11.png)
+
+```python
+from z3 import *
+
+a1 = [BitVec(f'a1[{i}]', 8) for i in range(37)]
+solver = Solver()
+
+solver.add(a1[0] == 76)
+solver.add(a1[3] == 75)
+solver.add(a1[4] == 123)
+solver.add(a1[2] == 65)
+solver.add(a1[6] == 110)
+solver.add(a1[7] == 103)
+solver.add(a1[8] == 114)
+solver.add(a1[9] == 95)
+solver.add((4 * a1[10]) == 208)
+solver.add(a1[11] == 95)
+solver.add(a1[12] == 108)
+solver.add(a1[18] == 48)
+solver.add(a1[19] == 110)
+solver.add(a1[20] == 116)
+solver.add(a1[22] == 100)
+solver.add(a1[23] == 111)
+solver.add(a1[24] == 95)
+solver.add(a1[27] == 95)
+solver.add(a1[29] == 52)
+solver.add(a1[30] == 110)
+solver.add(a1[33] == 108)
+solver.add(a1[34] == 108)
+solver.add(a1[35] == 121)
+solver.add(a1[36] == 125)
+solver.add(a1[17] == 100)
+solver.add(a1[5] == 97)
+solver.add(a1[15] == 51)
+solver.add(a1[26] == 116)
+
+solver.add((a1[25] - a1[5]) == 8)
+solver.add((a1[33] - a1[1]) == 57)
+solver.add((a1[34] + a1[31]) == 193)
+solver.add((a1[32] + a1[33]) == 160)
+solver.add((a1[21] + a1[28] - a1[25]) == 99)
+solver.add((a1[16] + 51 + a1[14] + 100) == 348)
+solver.add((a1[21] + a1[16] - a1[25]) == 85)
+solver.add(a1[26] != 1)
+solver.add((a1[15] ^ a1[1]) != 65)
+solver.add((a1[17] - a1[32] + a1[33]) == 156)
+solver.add((a1[21] ^ a1[17]) == 59)
+solver.add((a1[1] ^ a1[0] ^ a1[13] ^ a1[2] ^ a1[3]) == 68)
+solver.add((a1[10] & 0xCF) <= 9)
+
+if solver.check() == sat:
+    model = solver.model()
+    print("Solution found:")
+    print(model)
+
+else:
+    print("No solution found")
+```
+
+- Nếu có gì cần lưu ý thì, ta biết rằng format flag là `L3AK{}`. Nên ta có thể thay 5 phần tử đầu thành mã ascii tương ứng. Đồng thời, phần tử duy nhất phải guessing là `a1[26] = 'i'`.
+
+```
+flag: L3AK{angr_4_l1f3_d0nt_do_it_m4nU4lly}
+```
+
 ### Wires
 
 - Chall: [wires](Wires/wires)
@@ -8,42 +92,42 @@
 
 - Chương trình yêu cầu ta truyền thêm `argv` để thực thi theo đúng flow. Cụ thể là cần truyền vào một file tên myFlag, khi đó chương trình gen ra 1 cửa sổ có những đoạn text với các truy vấn cơ bản như `Up`, `Down`, `Left`, `Right`...
 
-![alt text](_IMG/image-1.png)
+![alt text](image-1.png)
 
 - Load vào `IDA` để phân tích sâu hơn, ta thấy được chương trình thực hiện một số thao tác cơ bản trong quá trình debug như: `check file name`, `read file`, `execute`, `check flag`.
 
-![alt text](_IMG/image-2.png)
+![alt text](image-2.png)
 
 - Từ đây mình cho rằng đây khả năng là một bài giải ma trận, vì cửa sổ được gen ra có các thao tác tương tự các hướng di chuyển và mình cũng nghĩ rằng file truyền vào sẽ là flag và được convert thành các hướng đi của ta trong ma trận.
 
 - Từ hướng suy nghĩ mình đặt ra ở trên, mình thực hiện debug để tìm kiếm map. Ở đây mình phát hiện rằng chức năng `validate` được trigger bằng phím `Enter` đóng vai trò là checker, thực hiện nhảy vào và debug tiếp.Tới đây thì hàm checker không thể convert sang mã giả được buộc mình phải đọc mã máy.
 
-![alt text](_IMG/image-4.png)
-![alt text](_IMG/image-3.png)
+![alt text](image-4.png)
+![alt text](image-3.png)
 
 - Tuy nhiên mình không tìm thấy thứ gì giống ma trận ở đây. Từ đó mình bỏ qua hàm này và tìm kiếm khắp nơi, nhưng cũng không có kết quả. Mình đã suy nghĩ tới việc file truyền vào mới là map, tuy nhiên điều này cũng hơi vô lý nên mình gạt bỏ ý tưởng này.
 
-- Nói thì đơn giản nhưng mình stuck ở đây gần 1 ngày @@. Bất lực tìm kiếm, mình chuyển hướng sang osint các thông tin có trong chương trình, và khi tìm kiếm tên của trình hiển thị là `fdf`, mình thấy một thứ khá thú vị.
+- Nói thì đơn giản nhưng mình stuck ở đây gần 1 ngày @@. Bất lực tìm kiếm, mình chuyển hướng sang osint các thông tin có trong chương trình, và khi tìm kiếm tên của trình hiển thị là `fdf`, thấy rằng đây khả năng là một loại file nên tìm kiếm thử. Và thấy một thứ khá thú vị.
 
 - [fdf file descript](https://github.com/francisrafal/FdF)
 
 - Thậm chí giao diện của file `fdf` trong [video demo](https://www.youtube.com/watch?v=Ov3ljgXXIAQ) còn giống hệt với chall này. Đổi hướng đi, truyền giá trị trong file [42.fdf](Wires/42.fdf) vào myFlag. Khi thực thi thì ta thấy chương trình biểu diễn như dưới.
 
-![alt text](_IMG/image-5.png)
+![alt text](image-5.png)
 
 - Tới đây mình đã mường tượng ra chương trình làm gì, nó sẽ đọc data từ file `myFlag`, thực hiện biểu diễn lên cửa sổ và bấm `enter` để check.
 
-![alt text](_IMG/image-6.png)
+![alt text](image-6.png)
 
 - Giờ thì mục tiêu của ta là tìm và rev lại được cách convert data từ file của chương trình, đồng thời lấy giá trị từ được mang ra kiểm tra và dịch sang output từ file `convert` được rì vợt.
 
 - Dù hàm check ta nhảy tới sau khi thực hiện truy vấn `enter-validate` không thể dịch sang mã giả như đã đề cập trên, ta thấy không khó để đọc được. Hàm này thực hiện đọc từng dòng một trong nội dung file truyền vào, xóa bỏ khoảng trắng, bỏ xuống dòng(`0xa`), convert char thành int... rồi truyền nó vào một ma trận. Sau đó là duyệt từng khối một trong ma trận(nói là `con trỏ cấp 2` kiểm soát các `con trỏ cấp 1`(mảng 1 chiều) tương ứng với các dòng cho dễ hình dung).
 
-![alt text](_IMG/image-8.png)
+![alt text](image-8.png)
 
 - Dưới đây là nội dung hàm `convert`.
 
-![alt text](_IMG/image-7.png)
+![alt text](image-7.png)
 
 - Khá dễ hiểu, hàm này duyệt mảng chứa nội dung của dòng. Kiểm tra xem `input[i]` có giống với `input[i+1]` hay không. Nếu giống, tiếp tục duyệt tới khi khác/null, và convert sang dạng string với format `ff[hex(số lượng số giống nhau)]ff[hex(input[i])]`.
 
@@ -89,13 +173,13 @@ print()
 
 - Giờ thì mình chạy tới hàm kiểm tra, tuy nhiên ở đây lại chỉ gọi ra 1 giá trị duy nhất là `ff01f4ff00`.
 
-![alt text](_IMG/image-9.png)
+![alt text](image-9.png)
 
 - Chương trình check tương ứng với số dòng của input, tuy nhiên việc check với 1 dải toàn `0` thì cũng chẳng thu được gì.
 
 - Với ý tưởng rằng flag hẳn phải ở đâu đó trong chương trình. Mình thử xref giá trị được đem ra so sánh xem có khúc nào bị chèn không nhưng cũng không có thêm thông tin. Sau một hồi thì thấy trong mục strings có khá nhiều giá trị được `encrypt` tại đây.
 
-![alt text](_IMG/image-10.png)
+![alt text](image-10.png)
 
 - Nhặt chúng ra để viết script:
 
@@ -132,7 +216,7 @@ for qq in maybeFlag:
 
 - Quăng output vào `myFlag`, và chạy lại chương trình. Và đây là thành quả 2 ngày mò mẫm^^.
 
-![alt text](_IMG/image.png)
+![alt text](image.png)
 
 ```
 flag: L3AK{42_1s_th3_answer}
