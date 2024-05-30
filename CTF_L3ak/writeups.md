@@ -91,7 +91,7 @@ print()
 
 ![alt text](_IMG/image-9.png)
 
-- Chương trình check tương ứng với số dòng của input, tuy nhiên việc check với 1 dải toàn `0` thì cũng chẳng có thông tin gì.
+- Chương trình check tương ứng với số dòng của input, tuy nhiên việc check với 1 dải toàn `0` thì cũng chẳng thu được gì.
 
 - Với ý tưởng rằng flag hẳn phải ở đâu đó trong chương trình. Mình thử xref giá trị được đem ra so sánh xem có khúc nào bị chèn không nhưng cũng không có thêm thông tin. Sau một hồi thì thấy trong mục strings có khá nhiều giá trị được `encrypt` tại đây.
 
