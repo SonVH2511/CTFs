@@ -337,6 +337,8 @@ for i in range(32):
 
 - Sơ bộ về cách mã hóa, khúc này chương trình tách plaintext 16byte thành 1 bộ 8byte(mình gọi là `comp[]`) rồi thực hiện xor với một cặp `round_keys{i+1,i}` tương ứng. Đồng thời map lại giá trị của tmp = `comp[i]` bằng cách đối chiếu các byte tương ứng trong `sbox[]`. Các biến được đem ra xor thì chỉ cần debug và đọc giá trị trong thanh ghi tương ứng. Cuối cùng là thêm(thực ra là ghi đè nhưng giải thích hơi phức tạp nên mình gọi là thêm cho tương đồng với script để dễ check đáp án, mình cũng dùng append() thay vì gán lại giá trị cho dễ check lỗi trong quá trình xây dựng script) `tmp` vào comp[2] và tiếp tục sinh comp[3] từ comp[1] và comp[2]...
 
+- Giá trị được in ra file `ciphertext.bin` là các bộ plaintext 16byte mã hóa thành các cặp comp[30], comp[31] tương ứng.
+
 ![alt text](_IMG/image-20.png)
 ![alt text](_IMG/image-19.png)
 
