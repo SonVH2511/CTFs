@@ -413,7 +413,7 @@ flag: L3AK{its_all_sta0ted_wit`_C}
 
 ![alt text](_IMG/image-18.png)
 
-- Việc ta cần làm chỉ là nhặt lại sbox, round_keys và để decrypt script làm việc của nó.
+- Việc ta cần làm chỉ là nhặt lại sbox, round_keys, sửa một vài chỗ bị thay đổi và để decrypt script làm việc của nó^^.
 
 ```python
 _sbox = [0xFF, 0xE4, 0xFD, 0x9A, 0x4B, 0xE0, 0x69, 0x36, 0xD7, 0x1C,
