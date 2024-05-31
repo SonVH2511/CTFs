@@ -335,6 +335,11 @@ for i in range(32):
 
 - Từ chương trình ta mô phỏng lại cách encrypt trên, ta hoàn toàn có thể xây dựng script giải mã.
 
+- Sơ bộ về cách mã hóa, khúc này chương trình tách plaintext 16byte thành 1 bộ 8byte(mình gọi là `comp[]`) rồi thực hiện xor với một cặp `round_keys{i+1,i}` tương ứng. Đồng thời map lại giá trị của tmp = `comp[i]` bằng cách đối chiếu các byte tương ứng trong `sbox[]`. Các biến được đem ra xor thì chỉ cần debug và đọc giá trị trong thanh ghi tương ứng.
+
+![alt text](_IMG/image-20.png)
+![alt text](_IMG/image-19.png)
+
 - Tạm thời bỏ qua các bước tính toán trung gian, khi ta quan sát giá trị đầu ra của từng round sẽ thấy rằng kết quả của round trước sẽ lại được dùng để mã hóa cho round sau. Vậy với giá trị trong file `flag.bin`, tách ra phần đầu tương ứng với giá trị tại round 31, 30 tương ứng. Rev các vòng lại để lấy được giá trị của round 29, 28, 27...Điều này không khó nêu mọi người chịu ngồi đọc hiểu chúng vì đa phần toàn phép `xor` mà thôi.
 
 - Dưới đây là script giải của mình.
