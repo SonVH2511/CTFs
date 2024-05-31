@@ -230,7 +230,7 @@ flag: L3AK{42_1s_th3_answer}
 
 - Sơ bộ về Chall, ta được cấp 1 file thực thi `CC`, và `flag.bin`. Rõ ràng là `CC` sẽ mang chức năng `encrypt`.
 
-- Về nội dung của encryptor, ta thấy chương trình thực hiện mã hóa 1 link youtube mà ai cũng biết là gì.
+- Về nội dung của encryptor, ta thấy chương trình thực hiện mã hóa 1 link youtube mà ai cũng biết là gì 🐧.
 
 - Các bước thao tác cơ bản trong chương trình là: thêm byte, tách chuỗi, mã hóa khối, rồi xuất ra file `ciphertext.bin`.
 
