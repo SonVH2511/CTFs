@@ -28,27 +28,27 @@ _round_keys = [0x0BAD1E1101, 0x0DEADBEEF00000000, 0x5D68FD66E00, 0x56DF778000000
                0x3EAA30AAEFBEFD7A, 0x201901B2A2D1E942, 0x0A11F551855A93191, 0x0BD100C80D95168F4, 0x2847D54615B4A28B, 0x6F44032036545A3D, 0x8FAA8C2B64ABF82, 0x0E8806406CA8B47A5, 0x0AA8C2B64AB26C067, 0x6406CA8B47A508F, 0x5B25593603E6DCEC, 0x6545A3D2847D5461, 0x0D80F9B73B14BF860, 0x4A11F551856C9564, 0x6297F0C094FD044C, 0x0AD92AC9B01F36E7, 0x0FD044C0AD9F4275F, 0x1F36E76297F0C094, 0x13AF8F9B736FA517, 0x604A7E8226056CFA, 0x45D8129FA0576FB4, 0x3E84EBE3E6DCDBE9, 0x87D09D7C7C057592, 0x28BB0253F40AEDF6, 0x8BB0253F40703187, 0x7D09D7C7C0575922, 0x4EBE3E02BA17FAB2, 0x8129FA03818C3BE8, 0x0E80E0630EF7FD417, 0x0F80AE85FEACA04A7, 0x0BFD594094F0EF2E3, 0x61DEFFA82FF015D0]
 enc = [151, 226, 254, 154, 221, 99, 201, 203, 133, 30, 200, 90, 45, 224, 113,
        27, 30, 245, 154, 238, 76, 230, 80, 53, 209, 187, 254, 54, 25, 147, 120, 246]
-# with open('E:\\CTF\\KCSC\\CTFs\\CTF_L3ak\\CC\\rickroll.bin', 'rb') as file:
-#     data = file.read()
-# for i in range(len(data)):
-#     enc.append(data[i])
+with open('E:\\CTF\\KCSC\\CTFs\\CTF_L3ak\\CC\\rickroll.bin', 'rb') as file:
+    data = file.read()
+for i in range(len(data)):
+    enc.append(data[i])
 
 # print(len(enc))
-__enc = [0x97e2fe9add63c9cb, 0x851ec85a2de0711b,
-         0x1ef59aee4ce65035, 0xd1bbfe36199378f6]
-
-# __tmp = 0
-# for i in range(len(enc)):
-#     if i % 8 == 0 and i != 0:
-#         __enc.append(__tmp)
-#         __tmp = 0
-#     __tmp <<= 8
-#     __tmp += enc[i]
-#     if i == 31:
-#         __enc.append(__tmp)
-# for i in __enc:
-#     print(hex(i))
-# # print(__enc)
+# __enc = [0x97e2fe9add63c9cb, 0x851ec85a2de0711b,
+#          0x1ef59aee4ce65035, 0xd1bbfe36199378f6]
+__enc = []
+__tmp = 0
+for i in range(len(enc)):
+    if i % 8 == 0 and i != 0:
+        __enc.append(__tmp)
+        __tmp = 0
+    __tmp <<= 8
+    __tmp += enc[i]
+    if i == 31:
+        __enc.append(__tmp)
+for i in __enc:
+    print(hex(i))
+# print(__enc)
 
 ans = 0
 
@@ -74,6 +74,6 @@ for k in range(2):
     ans <<= 64
     ans += comp[-2]
 
-print(hex(ans))
+print("hex flag: ", hex(ans))
 # 0x4c33414b7b523376656e67655f30665f5468335f536368316666797d04040404
 # L3AK{R3venge_0f_Th3_Sch1ffy}

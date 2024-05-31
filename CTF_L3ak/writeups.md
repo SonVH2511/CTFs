@@ -398,7 +398,7 @@ for k in range(2):
     ans <<= 64
     ans += comp[-2]
 
-print(hex(ans))
+print("hex flag: ",hex(ans))
 ```
 
 ```
@@ -492,7 +492,7 @@ for k in range(2):
     ans <<= 64
     ans += comp[-2]
 
-print(hex(ans))
+print("hex flag: ",hex(ans))
 ```
 
 ```

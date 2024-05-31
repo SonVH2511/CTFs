@@ -55,6 +55,7 @@ for k in range(2):
     ans <<= 64
     ans += comp[-2]
 
-print(hex(ans))
+print("hex flag: ", hex(ans))
+
 # 0x4c33414b7b6974735f616c6c5f737461307465645f776974605f437d04040404
 # L3AK{its_all_sta0ted_wit`_C}
