@@ -236,11 +236,11 @@ flag: L3AK{42_1s_th3_answer}
 
 - Chương trình kiểm tra xem input có độ dài là bội của `0xf` hay không. Nếu không, chương trình sẽ thêm byte `0x5` vào đuôi cho tới khi đủ.
 
-![alt text](image-13.png)
+![alt text](_IMG/image-13.png)
 
 - Tiếp đó là chương trình sẽ tách và mã hóa 16 byte một. Ở đây, chương trình tách tiếp thành 2 giá trị 8 byte và làm seed.
 
-![alt text](image-14.png)
+![alt text](_IMG/image-14.png)
 
 - Mô tả về hàm mã hóa, chương trình lặp 32 lần công đoạn mã hóa. Với mỗi lần lặp, một giá trị mới được sinh từ các phép xor với `round_key[]` và map lại bằng `sbox[]`. Dưới đây là chương trình mô tả lại quá trình hoạt động của hàm mình dựng lại.
 
@@ -326,12 +326,12 @@ for i in range(32):
 
 - Để kiểm chứng, sau khi mã hóa xong ta nhảy tới hàm push để kiểm tra giá trị truyền vào so với output nằm ở file `ciphertext.bin`.
 
-![alt text](image-17.png)
+![alt text](_IMG/image-17.png)
 
 - Rõ ràng là đúng khi giá trị tại lần lặp cuối là tương đương.
 
-![alt text](image-15.png)
-![alt text](image-16.png)
+![alt text](_IMG/image-15.png)
+![alt text](_IMG/image-16.png)
 
 - Từ chương trình ta mô phỏng lại cách encrypt trên, ta hoàn toàn có thể xây dựng script giải mã.
 
@@ -371,6 +371,7 @@ _round_keys = [0x0BAD6B3201, 0x0DEADBEEF00000000, 0x5D6B532CD00, 0x56DF778000000
 
 __enc = [0xfcb1c794d07e590d, 0xbf163efcab46fdf2,
          0xe5a0fcfa17673ce7, 0x149dafbd7289845]
+
 # __enc = [0x1068E1E5EEF92B2C, 0x3595BA73BC5A6BE,
 #          0x0C5D83B1ECF84D295, 0x6E3FD231D3F8ACB6]
 ans = 0
