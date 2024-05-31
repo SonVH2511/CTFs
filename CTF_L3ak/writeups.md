@@ -401,8 +401,6 @@ for k in range(2):
 print(hex(ans))
 ```
 
-- Flag không giống với flag trong một số wu khác, khả năng vì đầu giải lỗi đề nên author fix lại và sửa vài byte trong `flag.bin` để tránh share flag.
-
 ```
 flag: L3AK{its_all_sta0ted_wit`_C}
 ```
