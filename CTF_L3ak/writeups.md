@@ -406,6 +406,7 @@ for k in range(2):
     ans += comp[-2]
 
 print("hex flag: ",hex(ans))
+# 0x4c33414b7b6974735f616c6c5f737461307465645f776974605f437d04040404
 ```
 
 ```
@@ -499,10 +500,211 @@ for k in range(2):
     ans += comp[-2]
 
 print("hex flag: ",hex(ans))
+# 0x4c33414b7b523376656e67655f30665f5468335f536368316666797d04040404
 ```
 
 ```
 flag: L3AK{R3venge_0f_Th3_Sch1ffy}
+```
+
+### Anti
+
+- Chall: [Anti](Anti/anti)
+
+- Sau khi có thêm 1 tuần để thong thả làm với đủ các cách tiếp cận thì mình cũng giải được bài này.
+
+- Hướng tiếp cận chuẩn để giải quyết chall này dựa trên quá trình mình làm là:
+
+  - Xác định kiểu `antidebug` xuất hiện trong chall.
+  - Xác định luồng chuẩn của chall.
+
+- Về các kiểu `antidebug`, có khá nhiều loại cần kiểm chứng, `antidebug` có thể dùng để thay đổi giá trị làm sai lệch quá trình tính toán, ngắt chương trình bằng cách throw exception, check debugger,...hay có thể là thay đổi luồng chương trình.
+
+- Dù là gì thì mình cứ chạy hết một lượt rồi đặt `bp` những chỗ sú sú đã rồi tính sau.^^
+
+- Chạy tới khúc này vẫn khá mượt, nhảy vào `sub_401077`, ta sẽ thấy chương trình xuất hiện 1 hàm(mình đổi tên thành `anti()` cho dễ nhìn) khiến ta bị dính exception.
+
+![alt text](_IMG/image-22.png)
+
+![alt text](_IMG/image-23.png)
+
+- Cụ thể thì hàm này thực hiện `cmp rax` với một giá trị out range.
+
+![alt text](_IMG/image-24.png)
+
+- Tại đây sau khi debug vài lần thì mình thấy hàm này không có ý nghĩa gì nên mình trực tiếp nhảy qua chứ cũng không cần sửa byte. Sau đó ta thực hiện patch để nhảy tới `Continue()` là luồng chuẩn.
+
+![alt text](_IMG/image-26.png)
+
+- `Continue()` tương tự hàm trên, tiếp tục patch nhảy tới `mainProcess()`.
+
+![alt text](_IMG/image-25.png)
+
+- Tới hàm này rồi, sau khi đọc từng hàm và rename ra chương trình như dưới đây.
+
+```C
+__int64 MainProcess()
+{
+  __int64 *v0; // rax
+  _BYTE *v1; // rbx
+  __int64 *v2; // rax
+  __int64 v3; // rsi
+  const char *v4; // rdi
+  int v5; // eax
+  unsigned int v6; // eax
+  __int64 *v7; // rax
+  _BYTE *v8; // rbx
+  __int64 *v9; // rax
+  _BYTE *v10; // rbx
+  __int64 *v11; // rax
+  int v12; // eax
+  int v13; // eax
+  __int64 result; // rax
+  unsigned int v15; // [rsp+4h] [rbp-43Ch]
+  unsigned int v16; // [rsp+8h] [rbp-438h]
+  __int64 cmdline; // [rsp+18h] [rbp-428h]
+  char v18[1032]; // [rsp+20h] [rbp-420h] BYREF
+  unsigned __int64 v19; // [rsp+428h] [rbp-18h]
+
+  v19 = __readfsqword(0x28u);
+  sub_40230E(0, 0);
+  MayBeAnti();
+  v0 = debugmeifUcan();
+  v1 = sub_402BE9((unsigned __int64)v0);
+  v2 = debugmeifUcan();
+  sub_40281D((__int64)v2, 1u, (__int64)v1);
+  sub_402759(42);
+  v15 = sub_402749();
+  v3 = 1024LL;
+  if ( !sub_4022D5((__int64)v18, 1024LL) )
+  {
+    v4 = "getcwd";
+    msg_unknown_error((unsigned __int64)"getcwd");
+    goto LABEL_15;
+  }
+  sub_401883();
+  sub_40228C();
+  if ( v5 == -1 )
+    goto LABEL_4;
+  sub_4018CF();
+  v3 = 577LL;
+  sub_4022A8();
+  v16 = v6;
+  if ( v6 == -1 )
+  {
+    v4 = "open";
+    msg_unknown_error((unsigned __int64)"open");
+  }
+  else
+  {
+    v7 = OntherightTrack();
+    v8 = sub_402BE9((unsigned __int64)v7);
+    v3 = v16;
+    v4 = (const char *)OntherightTrack();
+    if ( sub_40281D((__int64)v4, v16, (__int64)v8) == -1 )
+    {
+      msg_unknown_error((unsigned __int64)"write");
+      v4 = (const char *)v16;
+      sub_402293();
+    }
+    else
+    {
+      cmdline = get_cmdline();
+      if ( cmdline )
+      {
+        v3 = v15;
+        if ( (unsigned int)sub_401CA4(cmdline, v15) == 1 )
+        {
+          v9 = Correct();
+          v10 = sub_402BE9((unsigned __int64)v9);
+          v11 = Correct();
+          v3 = 1LL;
+          sub_40281D((__int64)v11, 1u, (__int64)v10);
+        }
+        sub_402293();
+        if ( v12 == -1LL )
+        {
+          v4 = "close";
+          msg_unknown_error((unsigned __int64)"close");
+        }
+        else
+        {
+          v4 = v18;
+          sub_40228C();
+          if ( v13 == -1 )
+          {
+LABEL_4:
+            v4 = "chdir";
+            msg_unknown_error((unsigned __int64)"chdir");
+          }
+        }
+      }
+    }
+  }
+LABEL_15:
+  result = v19 - __readfsqword(0x28u);
+  if ( result )
+    return msg_program_terminated((__int64)v4, v3);
+  return result;
+}
+```
+
+- Ở đây nó gọi ra nhiều hàm gây rối nhưng thực tế lại khá dễ đọc, bởi có sự xuất hiện của `msg string` trong các hàm này. Sau một vài lần debug và nhảy vào từng hàm thì cũng xác định được hướng đi.
+
+- Ta sẽ né 2 hàm dưới đây và di chuyển tới luồng chứa hàm `Correct()` ở trong.
+
+![alt text](_IMG/image-27.png)
+![alt text](_IMG/image-28.png)
+
+- Mình có cơ sở để chạy theo luồng này là vì các msg trong các hàm lần lượt xuất hiện trong hàm như dưới đây.
+
+![alt text](_IMG/image-32.png)
+![alt text](_IMG/image-31.png)
+![alt text](_IMG/image-30.png)
+
+- Mình chỉ suy đoán rằng các chuỗi trong hàm đang hint cho ta đi đúng đường thôi. Quan trọng hơn, để nhảy vào vùng `correct()`, ta có đi qua một hàm `checker` được đặt làm điều kiện.
+
+![alt text](_IMG/image-34.png)
+
+- Nội dung của hàm này.
+
+![alt text](_IMG/image-33.png)
+![alt text](_IMG/image-35.png)
+
+- Hàm này thực hiện xor một giá trị 4byte với chính giá trị đó sau khi dịch trái với 1 giá trị cố định. Sau đó thực hiện kiểm tra với các const trong hàm `Check()` như trên.
+
+- Suy nghĩ một chút, dù chưa có cả 2 giá trị là `mayBeFlag` lẫn `bitshift`. Mình đã thử với 4 kí tự đầu `L3AK` format flag ở dạng byte xem có tương ứng với giá trị đầu tiên không.
+
+![alt text](_IMG/image-36.png)
+
+- Có vẻ mình đã gét sing đúng, dù sao cũng chả có manh mối nào khác 🐧. Từ đoạn này thì dễ rồi, duyệt trong khoảng 4byte, với công thức trên, cái nào đúng thì tếch ra thôi.
+
+- Dưới đây là script để vét bài này.
+
+```python
+ans = [0x1EE04D9B, 0xF77CAAAC, 0x44F4ECA3, 0x82E5EFFA]
+
+
+def rol(value, shift):
+    return ((value << shift) & 0xffffffff) | ((value & 0xffffffff) >> (32 - shift))
+
+def solve(cnt):
+    for num in range(0x2f2f2f2f, 0x7e7e7e7e):
+        # for i in range(32):
+        if (num ^ rol(num, 22)) == ans[cnt]:
+            print("cnt: ", cnt)
+            return num
+
+for cnt in range(4):
+    print(hex(solve(cnt)))
+```
+
+- Đợi cũng chục phút đấy :v.
+
+![alt text](_IMG/image-21.png)
+
+```
+flag: L3AK{br0_c4n_r3v}
 ```
 
 ## Mong WRITEUP này giúp ích cho các bạn!
