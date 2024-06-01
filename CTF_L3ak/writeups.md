@@ -656,7 +656,7 @@ LABEL_15:
 ![alt text](_IMG/image-27.png)
 ![alt text](_IMG/image-28.png)
 
-- Mình có cơ sở để chạy theo luồng này là vì các msg trong các hàm lần lượt xuất hiện trong hàm như dưới đây.
+- Mình có cơ sở để chạy theo luồng này là vì các msg trong các hàm lần lượt xuất hiện trong hàm như dưới đây(chứ chẳng nhẽ hàm có thông báo "unknown error" hay "program terminate" lại là luồng chuẩn được :v).
 
 ![alt text](_IMG/image-32.png)
 ![alt text](_IMG/image-31.png)
