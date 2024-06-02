@@ -707,6 +707,251 @@ for cnt in range(4):
 flag: L3AK{br0_c4n_r3v}
 ```
 
+### Awsome
+
+- Chall: [index.html](Awsome/build/index.html), [pkg](Awsome/build/pkg/)
+
+- Chương trình thực hiện đọc giá trị từ textbox của file html và convert sang dạng byte rồi check bằng file [awsome_bg.wasm](Awsome/build/pkg/awesome_bg.wasm)
+
+![alt text](_IMG/image-37.png)
+
+- Bằng một vài [converter](https://github.com/wasmkit/diswasm), ta thu được mã giả sinh bởi mã máy. Sau khi đọc một lúc thì mình thấy có đoạn `"check"`.
+
+```C
+// O[1] Decompilation of $func1, known as $func1
+export "check"; // $func1 is exported to "check"
+int $func1(int param0, int param1) {
+  // local index=2
+  int local2;
+  // local index=3
+  int local3;
+  // local index=4
+  int local4;
+  // local index=5
+  int local5;
+  // local index=6
+  int local6;
+  // local index=7
+  int local7;
+  // local index=8
+  int local8;
+  // local index=9
+  int local9;
+  // local index=10
+  int local10;
+  // local index=11
+  int local11;
+  // local index=12
+  int local12;
+  // local index=13
+  int local13;
+
+  global0 = local3 = (global0 - 0x50);
+  *((unsigned long *) local3 + 0x3c) = 5486031072848061934;
+  *((unsigned long *) local3 + 0x34) = 340528315340175203;
+  *((unsigned long *) local3 + 0x2c) = 5509388002251769388;
+  *((unsigned long *) local3 + 0x24) = 5567854816287694086;
+  *((unsigned long *) local3 + 0x1c) = 7292522372460443097;
+  *((unsigned long *) local3 + 0x14) = 4334395362698426110;
+  *((unsigned long *) local3 + 0xc) = -3427922058694346327;
+  *((unsigned int *) local3 + 0x4c) = 0x0;
+  *((unsigned long *) local3 + 0x44) = 17179869184;
+  if (param1) {
+    label$2: {
+      local9 = 0x4;
+      local8 = param1;
+      param1 = param0;
+      while (1) {
+        local5 = (local10 = ((unsigned) local8 >= 0x4) ? 0x4 : local8 & 0x3);
+        local7 = 0x0;
+        local11 = 0x0;
+        local2 = param1;
+        if (((unsigned) (local10 - 0x1) >= 0x3)) {
+          {
+            local12 = (local10 & 0x4);
+            local2 = 0x18;
+            while (1) {
+              local7 = ((*((unsigned char *) (local6 = (param1 + local11) + 0x3)) << local2) | (((local7 | *((unsigned char *) local6)) | (*((unsigned char *) (local6 + 0x1)) << (local2 - 0x10))) | (*((unsigned char *) (local6 + 0x2)) << (local2 - 0x8))));
+              local2 = (local2 + 0x20);
+              if ((local12 != local11 = (local11 + 0x4))) break label$5;
+            break ;
+            };
+            local2 = (param1 + local11);
+          };
+        };
+        if (local5) {
+          {
+            local6 = (local11 << 0x3);
+            while (1) {
+              local7 = ((*((unsigned char *) local2) << local6) | local7);
+              local6 = (local6 + 0x8);
+              local2 = (local2 + 0x1);
+              if (local5 = (local5 - 0x1)) break label$7;
+            break ;
+            };
+          };
+        };
+        local8 = (local8 - local10);
+        param1 = (param1 + local10);
+        if ((*((unsigned int *) local3 + 0x44) == local4)) {
+          {
+            $func10((local3 + 0x44), local4);
+            local4 = *((unsigned int *) local3 + 0x4c);
+            local9 = *((unsigned int *) local3 + 0x48);
+          };
+        };
+        *((unsigned int *) (local9 + (local4 << 0x2))) = local7;
+        *((unsigned int *) local3 + 0x4c) = local4 = (local4 + 0x1);
+        if (local8) break label$3;
+      break ;
+      };
+      local12 = *((unsigned int *) local3 + 0x44);
+      label$9: {
+        if (((local4 & 0x1) == 0x0)) {
+          {
+            local9 = *((unsigned int *) local3 + 0x48);
+            break label$9;
+          };
+        };
+        if ((local4 == local12)) {
+          {
+            $func10((local3 + 0x44), local4);
+            local12 = *((unsigned int *) local3 + 0x44);
+            local4 = *((unsigned int *) local3 + 0x4c);
+          };
+        };
+        *((unsigned int *) (local9 = *((unsigned int *) local3 + 0x48) + (local4 << 0x2))) = 0x0;
+        local4 = (local4 + 0x1);
+      };
+      local8 = 0x0;
+      label$12: {
+        label$13: {
+          if ((local4 == 0x0)) break label$13;
+          param1 = local4;
+          local5 = local9;
+          while (1) {
+            if ((local2 = ((unsigned) param1 >= 0x2) ? 0x2 : param1 == 0x1)) break label$12;
+            param1 = (param1 - local2);
+            local5 = {
+              local13 = (local5 + (local2 << 0x2));
+              local2 = *((unsigned int *) local5 + 0x4);
+              local7 = *((unsigned int *) local5);
+              local6 = -0x61c88647;
+              local11 = 0x20;
+              while (1) {
+                local2 = (((((local7 = (((local2 + local6) ^ (((local2 >>> 0x5) - 0x6fceac95) ^ ((local2 << 0x4) + 0x54684935))) + local7) << 0x4) + 0x6579666f) ^ (local6 + local7)) ^ ((local7 >>> 0x5) + 0x72544541)) + local2);
+                local6 = (local6 - 0x61c88647);
+                if (local11 = (local11 - 0x1)) break label$15;
+              break ;
+              };
+              *((unsigned int *) local5 + 0x4) = local2;
+              *((unsigned int *) local5) = local7;
+              local13;
+            };
+            if (param1) break label$14;
+          break ;
+          };
+          if ((local4 != 0xe)) break label$13;
+          param1 = local9;
+          local5 = (local3 + 0xc);
+          local2 = 0x0;
+          local4 = 0x38;
+          label$16: {
+            while (1) if ((local8 = *((unsigned char *) param1) == local10 = *((unsigned char *) local5))) {
+              {
+                param1 = (param1 + 0x1);
+                local5 = (local5 + 0x1);
+                if (local4 = (local4 - 0x1)) break label$17;
+                break label$16;
+              };
+            };
+            local2 = (local8 - local10);
+          };
+          local8 = (local2 == 0x0);
+        };
+        if (local12) {
+          $func2(local9);
+        };
+        $func2(param0);
+        break label$2;
+      };
+      global0 = param0 = (global0 - 0x30);
+      *((unsigned int *) param0 + 0x4) = 0x1;
+      *((unsigned int *) param0) = 0x1;
+      *((unsigned long *) (param0 + 0x14)) = 0x2;
+      *((unsigned int *) (param0 + 0x2c)) = 0x1;
+      *((unsigned int *) param0 + 0xc) = 0x2;
+      *((unsigned int *) param0 + 0x8) = 0x1001cc;
+      *((unsigned int *) param0 + 0x24) = 0x1;
+      *((unsigned int *) param0 + 0x10) = (param0 + 0x20);
+      *((unsigned int *) param0 + 0x28) = param0;
+      *((unsigned int *) param0 + 0x20) = (param0 + 0x4);
+      $func21((param0 + 0x8), 0x10000c);
+      abort("unreachable");
+    };
+  };
+  global0 = (local3 + 0x50);
+  return local8;
+}
+```
+
+- Dù trông rối nhưng đọc khá quen thuộc khi đây là mã hóa `TEA`. Nếu đây thật là hàm `"check"`, khả năng giá trị đầu ra sau khi mã hóa cipher ở `local3` sẽ được đem ra so sánh với đống byte convert từ chuỗi mình nhập vào.
+
+- Ta nhặt cipher, delta rồi giải mã bằng cách viết ngược lại là được.
+
+![alt text](_IMG/image-38.png)
+
+```python
+src = [0x4c224c31cbdd25ee,
+       0x4b9ccb2d7d03763,
+       0x4c754732b404062c,
+       0x4d44fe74a5c69d06,
+       0x65343e75d717f5d9,
+       0x3c26dd9e25bd76fe,
+       0xd06d930cadcc39a9]
+
+buf = []
+for i in range(6, -1, -1):
+    buf.append(src[i] & 0xFFFFFFFF)
+    buf.append(src[i] >> 32)
+
+delta = 0x9E3779B9
+k0 = 0x54684935
+k1 = (0x6fceac95 ^ 0xFFFFFFFF) + 1
+k2 = 0x6579666f
+k3 = 0x72544541
+
+sum = 0
+for i in range(32):
+    sum += delta
+tmp = sum
+
+for i in range(7):
+    sum = tmp
+    v0 = buf[i * 2]
+    v1 = buf[i * 2 + 1]
+    for j in range(32):
+        v1 = (v1 - ((sum + v0) ^ (((v0 << 4) + k2) & 0xFFFFFFFF)
+              ^ (((v0 >> 5) + k3) & 0xFFFFFFFF))) & 0xFFFFFFFF
+        v0 = (v0 - ((sum + v1) ^ (((v1 << 4) + k0) & 0xFFFFFFFF)
+              ^ (((v1 >> 5) + k1) & 0xFFFFFFFF))) & 0xFFFFFFFF
+        sum -= delta
+    buf[i * 2] = v0
+    buf[i * 2 + 1] = v1
+
+for i in buf:
+    hex_values = hex(i)[2:]
+    result_string = ''.join([chr(int(hex_values[i:i+2], 16))
+                            for i in range(0, len(hex_values), 2)])
+    print(result_string[::-1], end='')
+```
+
+![alt text](_IMG/image-39.png)
+
+```
+flag: L3AK{Here's_YOur_w4sm_Challenge_n0t_th4t_hArd_right??}
+```
+
 ## Mong WRITEUP này giúp ích cho các bạn!
 
 ```py
