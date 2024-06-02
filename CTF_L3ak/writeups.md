@@ -144,7 +144,7 @@ hoặc trong 1 trường hợp khác:
 `0 1 0 0 0 1 1 1 0 0 0` -> ["ff0001ff00", "ff0001ff01", "ff0003ff00", "ff0003ff01", "ff0003ff00"]
 ```
 
-- Lưu ý rằng dãy kí tự được convert sang dạng số bằng `atoi()` nên ta có thể kết luận rằng trong file myFlag sẽ chỉ chứa các giá trị từ 1-10.^^
+- Lưu ý rằng dãy kí tự được convert sang dạng số bằng `atoi()` nên ta có thể kết luận rằng trong file myFlag sẽ chỉ chứa các giá trị từ trong khoảng 0-0xff.^^
 
 - Khi đã nắm được cách convert của chương trình, mình viết hàm reverse như sau:
 
