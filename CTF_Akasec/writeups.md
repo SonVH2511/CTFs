@@ -4,11 +4,11 @@
 
 - Quăng vào `IDA`, nhìn sơ bộ ta thấy chương trình thực hiện biến đổi 1 dải giá trị. Ban đầu mình nghĩ đây là bài ez thì chắc nó biến đổi in ra flag luôn, tuy nhiên dải giá trị này khá lớn, đồng thời biên dưới còn có lệnh `call` sau khi truyền data vào nên chắc nó là `shellcode`.
 
-![alt text](_img/image-1.png)
+![alt text](_IMG/image-1.png)
 
 - Cắm breakpoint và tiến hành debug động, chương trình bị văng ra liên tục và không nhảy tới bp mình đặt. Thấy có dấu hiệu của antidebug, tìm một chút thì mình nhìn ra hàm dưới đây.
 
-![alt text](_img/image-2.png)
+![alt text](_IMG/image-2.png)
 
 - Đặt bp trong này rồi nhảy theo nhánh chuẩn, nhảy tới shellcode thì ta thấy nó có nội dung như dưới.
 
@@ -73,15 +73,15 @@ debug004:00007FE37F52A08C ; ----------------------------------------------------
 
 - Đoạn mã này không thể decompile thành mã giả vì chứa nội dung không hợp lệ, dễ thấy là đoạn lệnh `call    $+5`. Nop nó đi là được^^.
 
-![alt text](_img/image-3.png)
+![alt text](_IMG/image-3.png)
 
 - Mã giả của shellcode sẽ trông như dưới đây.
 
-![alt text](_img/image-4.png)
+![alt text](_IMG/image-4.png)
 
 - Giờ thì thu giá trị sau khi `xor` là có flag rồi.
 
-![alt text](_img/image.png)
+![alt text](_IMG/image.png)
 
 ```
 flag: akasec{sh1tty_p4ck3d_b1n4ry}
@@ -91,7 +91,7 @@ flag: akasec{sh1tty_p4ck3d_b1n4ry}
 
 - Có lẽ từ sau mình không cho mấy bài kiểu này vào wu nữa -.-. trông hơi vô nghĩa.
 
-![alt text](_img/image-5.png)
+![alt text](_IMG/image-5.png)
 
 ```
 flag: akasec{strings_b35t_t00l_1n_r3v3r5e_eng1n33r1ng}
@@ -101,7 +101,7 @@ flag: akasec{strings_b35t_t00l_1n_r3v3r5e_eng1n33r1ng}
 
 - Tiếp tục là câu chuyện về random, bài này thì lv cao hơn các bài random khác một chút khi phải connect sever nên mình sẽ viết pwntools để bắt output sever trả về và truyền vào script để gen ra flag. Tất nhiên ta cũng có thể duyệt trong 1 khoảng giá trị khi biết seed sẽ không khác trong sever là bao nếu không quá máy móc.
 
-![alt text](_img/image-6.png)
+![alt text](_IMG/image-6.png)
 
 - về script thì mình thấy trong chương trình có đúng 1 phép xor nên cứ lấy cả chương trình ra là được.
 
@@ -151,7 +151,7 @@ s.close()
 
 - Compile file C trước rồi chạy script tới khi ra flag là được. Và hiển nhiên là đừng chạy trên win, Chall này là 1 file `ELF` nên ta cần chạy trên linux mới cho seed giống nhau được.
 
-![alt text](_img/image-7.png)
+![alt text](_IMG/image-7.png)
 
 ```
 flag: akasec{n0t_t00_m4ny_br41nc3lls_l3ft}
@@ -193,7 +193,7 @@ undefined8 main(void)
 
 - Chương trình khá dễ đọc, đơn giản chia inpput thành 4 phần dạng `QWORD` là mã hóa input 4 lần rồi kiểm tra với các các giá trị tương ứng như hàm check dưới đây.
 
-![alt text](_img/image-8.png)
+![alt text](_IMG/image-8.png)
 
 - Nhét các biểu thức vào z3 để giải, hoặc ai try hard có thể rev lại hết vì cũng toàn phép cộng với xor thôi :v.
 
@@ -482,15 +482,15 @@ flag: akasec{1n_my_b4g_0n3_s3c0nd_0n3}
 
 - Sau khi map lại key và thử một vài cách bấm, sau khoảng 30 phím thì trả về wrong và thực hiện nhập lại.
 
-![alt text](_img/image-17.png)
+![alt text](_IMG/image-17.png)
 
 - Đi sâu vào phân tích bằng `Ghira`. Về phần cài đặt `extension` để analyze file ROM thì có thể tham khảo tại [đây]().
 
-![alt text](_img/image-18.png)
+![alt text](_IMG/image-18.png)
 
 - Chương trình đơn giản là kiểm tra input với một dải key 30 phần tử, vậy ta sẽ check hexdump trước và sau khi nhập input để xem các giá trị phím bấm tương ứng.
 
-![alt text](_img/image-21.png)
+![alt text](_IMG/image-21.png)
 
 ```python
 parammid = [0x03, 0x0c, 0x0a, 0x0a, 0x0a, 0x0a, 0x14, 0x01, 0x01, 0x0a, 0x04, 0x07, 0x19, 0x09, 0x01, 0x0a, 0x02, 0x05, 0x09, 0x07, 0x02, 0x0c, 0x09, 0x07, 0x0a, 0x0c, 0x0a, 0x03, 0x09, 0x03]
@@ -517,7 +517,7 @@ for i in parammid:
 print(res)
 ```
 
-![alt text](_img/image-22.png)
+![alt text](_IMG/image-22.png)
 
 ```
 flag: akasec{m1ps_1s_c00l_l0l}
@@ -529,13 +529,13 @@ flag: akasec{m1ps_1s_c00l_l0l}
 
 - Phân tích encryptor, hàm main thực hiện các chức năng như check argv, mở file được truyền vào, check xem có phải `ELF` không, tạo random key, mã hóa các section bằng RC4, write file.
 
-![alt text](_img/image-9.png)
+![alt text](_IMG/image-9.png)
 
 #### Gen_randkey
 
 - Tuy gọi là random nhưng đọc chương trình thì ta biết rằng nó sẽ giới hạn seed trong khoảng `[0x1337:0x1337+500]`.
 
-![alt text](_img/image-10.png)
+![alt text](_IMG/image-10.png)
 
 - Mình dễ dàng nhặt ra để vét hết tất cả các key như dưới đây.
 
@@ -635,11 +635,11 @@ unsigned __int64 __fastcall MainProc(
 
 - Việc mã hóa như này có thể là để ta nắm được cụ thể vị trí và độ lớn của các phân đoạn bị mã hóa rồi vét cạn, dễ dàng dùng 1 số tool phân tích ra như dưới đây.
 
-![alt text](_img/image-14.png)
+![alt text](_IMG/image-14.png)
 
 - Tiếp đến là làm sao để nhận diện key chuẩn trong 500 key này? Mình sẽ check các byte đầu khi mã hóa, thường các file elf sẽ luôn có các byte này ở đầu.
 
-![alt text](_img/image-15.png)
+![alt text](_IMG/image-15.png)
 
 - Vậy là chỉ cần kiểm tra xem các byte đầu có tương đồng không là được, dưới đây là script vét của mình.
 
@@ -1203,7 +1203,7 @@ for i in __brut:
 
 - Một lý do nữa khiến mình chọn cách truyền ngược lại vào encryptor thay vì tự rev lại là file `flag` quá to nên không thể đọc hết bằng `fopen` được :v.
 
-![alt text](_img/image-16.png)
+![alt text](_IMG/image-16.png)
 
 ```
 flag: AKASEC{h4lf_p4ck_h4lf_7h3_fl46}
@@ -1213,7 +1213,7 @@ flag: AKASEC{h4lf_p4ck_h4lf_7h3_fl46}
 
 - Quăng vào `IDA`, chạy chương trình dễ dang nhận ra `antidebug` ở đây khi nhánh dẫn đi thực hiện exit, patch `al` để nhảy vào nhánh chuẩn.
 
-![![alt text](_img/image-20.png)](image-19.png)
+![![alt text](_IMG/image-20.png)](image-19.png)
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
