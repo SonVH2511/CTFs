@@ -484,7 +484,7 @@ flag: akasec{1n_my_b4g_0n3_s3c0nd_0n3}
 
 ![alt text](_IMG/image-17.png)
 
-- Đi sâu vào phân tích bằng `Ghira`. Về phần cài đặt `extension` để analyze file ROM thì có thể tham khảo tại [đây]().
+- Đi sâu vào phân tích bằng `Ghira`. Về phần cài đặt `extension` để analyze file ROM thì có thể tham khảo tại [đây](https://www.youtube.com/watch?v=3d3a39LuCwc).
 
 ![alt text](_IMG/image-18.png)
 
