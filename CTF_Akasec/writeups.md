@@ -1213,7 +1213,7 @@ flag: AKASEC{h4lf_p4ck_h4lf_7h3_fl46}
 
 - Quăng vào `IDA`, chạy chương trình dễ dang nhận ra `antidebug` ở đây khi nhánh dẫn đi thực hiện exit, patch `al` để nhảy vào nhánh chuẩn.
 
-![![alt text](_IMG/image-20.png)](image-19.png)
+![alt text](_IMG/image-20.png)
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
