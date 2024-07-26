@@ -137,7 +137,7 @@ flag: ictf{m0r3_than_1_way5_t0_c0n7r0l}
 
 - Nội dung của hàm `encryptor` đơn giản như này.
 
-![alt text](image.png)
+![alt text](_IMG/image.png)
 
 - Thứ duy nhất ta thiếu là key, nhưng lại biết format flag là `ictf{` nên dễ dàng xor ngược lại để lấy key.
 
@@ -166,21 +166,21 @@ flag: ictf{ru57_r3v_7f4d3a}
 
 - Chương trình thực hiện mã hóa từng byte một rồi trả ra file `output.bin` như dưới.
 
-![alt text](image-2.png)
+![alt text](_IMG/image-2.png)
 
 - Cụ thể hàm mã hóa, chương trình thực hiện chạy con VM với bộ truy vấn như dưới.
 
-![alt text](image-3.png)
+![alt text](_IMG/image-3.png)
 
 - VM
 
-![alt text](image-4.png)
+![alt text](_IMG/image-4.png)
 
 - Sau khi debug 1 lúc thì mình thấy dữ liệu được lưu trữ ở dạng dslk, với các Node được nối với nhau thông qua địa chỉ của node liền sau. Tiếp tới là test chức năng của các hàm rồi rename lại.
 
 - Quan sát mảng truy vấn ta có thể dump ra dưới đây.
 
-![alt text](image-1.png)
+![alt text](_IMG/image-1.png)
 
 - Khúc đầu truy vấn 4 là nó nhặt ra 16ptu rồi truyền vào `Flag<>`.
 
@@ -190,7 +190,7 @@ flag: ictf{ru57_r3v_7f4d3a}
 
 - Ví dụ cặp đầu tiên là `0x02, 0x01, 0x05, 0xAA, 0x02, 0x02, 0x05, 0xED` thì mình có cái dslk:
 
-![alt text](image-5.png)
+![alt text](_IMG/image-5.png)
 
 - 2 4 5 là khởi tạo, 1 3 là xử lý nhân, cộng rồi đều thêm vào đuôi.
 
