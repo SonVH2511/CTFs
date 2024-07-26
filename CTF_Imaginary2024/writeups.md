@@ -2,7 +2,7 @@
 
 - Haycuvotuvalacquanlenemoi, sau 2 giải rating 100, tới tuần này cũng được thở chút(nhưng vẫn pay 40k TxT). WU này mình sẽ bỏ các bài không thuần rev hoặc quá dễ(và tất nhiên là cả những bài mình chưa làm được-sẽ cố gắng cập nhật sau :v) đi. Giờ thì bắt đầu thôi^^.
 
-- Note: tin vui là mình fix được git và push mọi thứ lên bình thường, tin xấu là mình pull nhánh hơi cũ và reset lại hết nên mất sạch file thực thi các chall và script rồi(mấy cái đường dẫn đến chall dưới kia côk hết), mọi thứ dưới đây là những gì còn sót lại. :((
+- Note: tin vui là mình fix được git và push mọi thứ lên bình thường, tin xấu là mình pull nhánh hơi cũ và reset lại hết nên mất sạch file thực thi các chall và script rồi(mấy cái đường dẫn đến chall dưới kia côk hết, mình sẽ đẩy file ida của các chall lên thay, còn script thì...), mọi thứ dưới đây là những gì còn sót lại. :((
 
 ### Watchdog
 
