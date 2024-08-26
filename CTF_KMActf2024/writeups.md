@@ -1,8 +1,48 @@
 ## CTFs/KMActf_2024
 
-- KMActf2024 Là giải kmactf đầu tiên mình tham gia. Mình thấy bản thân thể hiện chưa tốt, cơ hội làm bài tư cách cá nhân hiếm hoi giúp mình thấy được khá nhiều khuyết điểm mà lâu nay chưa
+- KMActf2024 Là giải kmactf đầu tiên mình tham gia. Mình thấy bản thân thể hiện chưa tốt, cơ hội làm bài tư cách cá nhân hiếm hoi giúp mình thấy được khá nhiều khuyết điểm mà lâu nay chưa để ý. Hôm qua khá choke, phần lớn thời gian cuối giờ mình dùng để tự vấn, sao lại choke vậy nhỉ?
+
+- Trong các giải khác, việc nghĩ ra hướng đi lệch là điều hết sức bình thường, cần phải debug, xem xét nhiều lần mới cho ra hướng đi chính xác. Tuy nhiên điều khác biệt mình ngộ ra là lần này mình không có các anh hỗ trợ như các lần trước nữa. Việc trao đổi thường xuyên giúp mình kiểm chứng suy luận và nắm bắt chall nhanh hơn. Nhưng lần này đấu đơn nên khi mindset lệch khiến mình khá nản, sử dụng thời gian không tốt, vài cái sai nhỏ kéo theo những cái sai lớn hơn...
+
+- Một điều nữa mình nghĩ đến là việc kiến thức chỉ nằm trong RE khiến mình trở nên bị động trong lần thi này. RE đợt này chỉ có 2 bài, 1 bài dễ, bài còn lại không khó nhưng không hiểu sao về nhà mới solve được@@. Mình hoàn thành bài 1 khá sớm và stuck ở bài 2, tuy nhiên lại không có cơ hội đá sang bài khác vì hết rồi còn đâu :v. Mảng khác thì không biết làm còn mảng của mình thì stuck, thời gian cuối của cuộc thi với mình trở nên kinh khủng, bất lực ngồi bấm f8 và tự kiểm điểm bản thân.
+
+- Nên là, việc chia nhỏ lại team để tự chơi có lẽ là khoảng thời gian cần hard cá nhân hơn, đồng thời là cơ hội để nghiêm túc học thêm 1 mảng khác bổ trợ song song nhằm tránh bị động trước độ khó, số lượng chall của các giải cá nhân khác và cũng là để bù vào phần khuyết của team.
+
+- Chút tâm sự vậy thôi, giờ thì là phần wu :v
 
 ### EzMath
+
+- Chall này thực hiện mã hóa `Input` rồi check với `target`.
+
+  ![alt text](image-1.png)
+
+- Đối tượng ta cần quan sát là `v33`, mình sẽ trace ngược lên để xem những thành phần nào biến đổi ra `v33`. từ đó lần ra: `v33` -> `v26` -> `v31`.
+
+  ![alt text](image-2.png)
+
+- `v31` có 2 luồng, nếu kí tự đầu là `E` thì v31 sẽ được gen ra từ `Input` và `v20`, nếu không sẽ là `Input` và `v21`. Để ý kĩ hơn thì ta thấy được rằng các kí tự của Input được biến đổi độc lập với nhau, và có `cnt = 400/21 ~ 20` lần tương ứng với 20 kí tự.
+
+  ![alt text](image-3.png)
+
+- Nhập thử input với kí tự đầu là `E` và độ dài 20, ta thấy v31 như này.
+
+  ![alt text](image-5.png)
+
+- Khá ngạc nhiên khi với 1 cái input vu vơ lại gen ra 1 chuỗi gần có nghĩa, mình thử 1 Input khác hoàn toàn vẫn trả ra kết quả giống vậy, khả năng cao 1 chuỗi có nghĩa được gen ra sẽ là giá trị chuẩn.
+
+  ![alt text](image.png)
+
+- Vì các phần tử được gen ra độc lập nên dễ dàng vét hết các giá trị, cộng thêm 2 chuỗi trên mình kết luận được chuỗi chuẩn là `ban_da_bi_lua!!!!!!!`(đoạn này bắt đầu nghĩ chuỗi gì mà sus thế :v).
+
+- Sau khi loay hoay 1 hồi thì mình nhảy xuống luồng còn lại và nhận được chuỗi khá giống nội dung flag.
+
+![alt text](image-4.png)
+
+- Có vẻ đúng hướng, mình brute hết các case và in ra các phần tử có thể xuất hiện trong các vị trí tương ứng.
+
+![alt text](image-6.png)
+
+- Sau vài lần nhập nữa kết hợp với đối chiếu list trên thì ra được `Input` chuẩn
 
 ```python
 pos = [0x0, 0x27, 0x0A, 0x18, 0x15, 0x8, 0x1E, 0x26, 0x0F, 0x5, 0x8, 0x0F, 0x0A, 0x18, 0x7, 0x10, 0x14, 0x11, 0x8, 0x5, 0x18, 0x1, 0x1D, 0x0F, 0x9, 0x19, 0x28, 0x16, 0x26, 0x2, 0x5, 0x1B, 0x0E, 0x12, 0x26, 0x26, 0x11, 0x6, 0x20, 0x4, 0x1A, 0x17, 0x2, 0x0C, 0x11, 0x1, 0x14, 0x0C, 0x25, 0x1A, 0x25, 0x1C, 0x3, 0x0E, 0x4, 0x21, 0x0C, 0x18, 0x9, 0x24, 0x17, 0x1A, 0x20, 0x3, 0x27, 0x8, 0x0E, 0x11, 0x18, 0x4, 0x18, 0x11, 0x1E, 0x4, 0x10, 0x5, 0x0C, 0x0D, 0x0D, 0x8, 0x3, 0x0F, 0x0E, 0x17, 0x4, 0x17, 0x1E, 0x7, 0x1C, 0x15, 0x23, 0x0, 0x0D, 0x1E, 0x11, 0x11, 0x25, 0x27, 0x0A, 0x20, 0x10, 0x21, 0x21, 0x0C, 0x0, 0x5, 0x1A, 0x18, 0x3, 0x1C, 0x0C, 0x21, 0x1D, 0x28, 0x11, 0x10, 0x1C, 0x28, 0x6, 0x0, 0x20, 0x22, 0x15, 0x1D, 0x26, 0x9, 0x6, 0x0, 0x23, 0x6, 0x1D, 0x2, 0x1, 0x2, 0x28, 0x9, 0x1A, 0x0, 0x10, 0x16, 0x8, 0x0C, 0x1C, 0x1, 0x1A, 0x27, 0x2, 0x7, 0x3, 0x19, 0x27, 0x1B, 0x15, 0x11, 0x1F, 0x0C, 0x26, 0x7, 0x16, 0x1A, 0x5, 0x3, 0x24, 0x17, 0x28, 0x6, 0x7, 0x20, 0x8, 0x0D, 0x12, 0x10, 0x21, 0x11, 0x0C, 0x15, 0x23, 0x1A, 0x0A, 0x21, 0x13, 0x0C, 0x11, 0x9, 0x1B, 0x13, 0x0B, 0x1E, 0x15, 0x9, 0x2, 0x1F, 0x0D, 0x3, 0x15, 0x1C, 0x25, 0x28, 0x16, 0x4,
@@ -55,11 +95,28 @@ for i in enc:
     print(chr(i), end='')
 ```
 
+![alt text](image-7.png)
+![alt text](image-8.png)
+
 ```rust
 flag: KMACTF{SUper_e4sy_Md5_CR4CK}
 ```
 
 ### PUSHwindowPOPnothing
+
+- Đừng ai debug nó ở local như mình 🐧.
+
+- Dành cho ai không debug được và bị pop up lên thông báo `CreateProcess failed: The requested operation requires elevation.`, ta sẽ phải chạy IDA trên quyền admin(huhu 1h fix của tôi).
+
+- Đi vào phân tích, chương trình này yêu cầu ta nhập flag rồi check, nếu sai thì...
+
+![alt text](image-10.png)
+
+- Trong chương trình này ngoài khúc kiểm tra độ dài ra thì không thấy checker đâu, tìm một lúc thì thấy gọi `pipe`, thứ dùng để truyền dữ liệu giữa các tiến trình độc lập.
+
+![alt text](image-9.png)
+
+- Vậy là mình xác định được hướng đi của bài này, khả năng bài sẽ gen ra 1 chương trình checker và nhận input của `KMACTF.exe`
 
 ```python
 Checker = [0x72, 0xBB, 0xB2, 0xCD, 0x58, 0xB2, 0x81, 0x0E, 0xA4, 0xB1,
