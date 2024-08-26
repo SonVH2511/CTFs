@@ -152,7 +152,7 @@ flag: KMACTF{SUper_e4sy_Md5_CR4CK}
 
 - Điều này sẽ không ảnh hưởng nếu ta tính toán trên các thanh ghi có độ lớn bằng nhau, nhưng trong bài này thì khác. `Sus[cnt]` được chuyển từ dạng byte vào thanh ghi 4 byte `eax`, vậy khi giá trị của `Sus[cnt]` có bit đầu bằng 1, nó sẽ tự động thêm vào `0xffffff` để giữ tính chất.
 
-- Vậy là giải quyết xong vấn đề tính toán, vậy làm sao để tính ra flag đây? Đầu tiên mình thử `z3` nhưng quá nhiều phép toán bit xen vào nên chuyển qua brute.
+- Vậy là giải quyết xong vấn đề tính toán, còn làm sao để tính ra flag đây? Đầu tiên mình thử `z3` nhưng quá nhiều phép toán bit xen vào nên chuyển qua brute.
 
 - Lý do để brute thì mình đã nói ở trên, chương trình biến đổi lần lượt từng giá trị của các phần tử một cách độc lập nên độ phức tạp không lớn. Thêm vào đó, bỏ qua bước `base64`, thứ ta brute không phải flag mà là chuỗi `base64` trước khi bị biến đổi. `base64` ở đây là một chuỗi 64 kí tự, khi biến đổi thì thành giá trị trong mảng `checker[]` tức là trong các phần tử hợp lệ cấu thành chuỗi `base64` sẽ có ít nhất 1 kí tự trả ra giá trị tương ứng.
 
@@ -242,7 +242,7 @@ for r in vm:
             cnt -= 1
 ```
 
-- Kết quả trả ra có 7 cặp có 2 giá trị thỏa mãn -> 128 mã `base64`.
+- Kết quả trả ra có 7 cặp có 2 giá trị thỏa mãn => 128 mã `base64`.
 
 ```
 ans:
