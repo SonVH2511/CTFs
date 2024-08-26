@@ -14,33 +14,33 @@
 
 - Chall này thực hiện mã hóa `Input` rồi check với `target`.
 
-  ![alt text](image-1.png)
+  ![alt text](_IMG/image-1.png)
 
 - Đối tượng ta cần quan sát là `v33`, mình sẽ trace ngược lên để xem những thành phần nào biến đổi ra `v33`. từ đó lần ra: `v33` -> `v26` -> `v31`.
 
-  ![alt text](image-2.png)
+  ![alt text](_IMG/image-2.png)
 
 - `v31` có 2 luồng, nếu kí tự đầu là `E` thì v31 sẽ được gen ra từ `Input` và `v20`, nếu không sẽ là `Input` và `v21`. Để ý kĩ hơn thì ta thấy được rằng các kí tự của Input được biến đổi độc lập với nhau, và có `cnt = 400/21 ~ 20` lần tương ứng với 20 kí tự.
 
-  ![alt text](image-3.png)
+  ![alt text](_IMG/image-3.png)
 
 - Nhập thử input với kí tự đầu là `E` và độ dài 20, ta thấy v31 như này.
 
-  ![alt text](image-5.png)
+  ![alt text](_IMG/image-5.png)
 
 - Khá ngạc nhiên khi với 1 cái input vu vơ lại gen ra 1 chuỗi gần có nghĩa, mình thử 1 Input khác hoàn toàn vẫn trả ra kết quả giống vậy, khả năng cao 1 chuỗi có nghĩa được gen ra sẽ là giá trị chuẩn.
 
-  ![alt text](image.png)
+  ![alt text](_IMG/image.png)
 
 - Vì các phần tử được gen ra độc lập nên dễ dàng vét hết các giá trị, cộng thêm 2 chuỗi trên mình kết luận được chuỗi chuẩn là `ban_da_bi_lua!!!!!!!`(đoạn này bắt đầu nghĩ chuỗi gì mà sus thế :v).
 
 - Sau khi loay hoay 1 hồi thì mình nhảy xuống luồng còn lại và nhận được chuỗi khá giống nội dung flag.
 
-![alt text](image-4.png)
+![alt text](_IMG/image-4.png)
 
 - Có vẻ đúng hướng, mình brute hết các case và in ra các phần tử có thể xuất hiện trong các vị trí tương ứng.
 
-![alt text](image-6.png)
+![alt text](_IMG/image-6.png)
 
 - Sau vài lần nhập nữa kết hợp với đối chiếu list trên thì ra được `Input` chuẩn
 
@@ -95,8 +95,8 @@ for i in enc:
     print(chr(i), end='')
 ```
 
-![alt text](image-7.png)
-![alt text](image-8.png)
+![alt text](_IMG/image-7.png)
+![alt text](_IMG/image-8.png)
 
 ```rust
 flag: KMACTF{SUper_e4sy_Md5_CR4CK}
@@ -110,13 +110,55 @@ flag: KMACTF{SUper_e4sy_Md5_CR4CK}
 
 - Đi vào phân tích, chương trình này yêu cầu ta nhập flag rồi check, nếu sai thì...
 
-![alt text](image-10.png)
+![alt text](_IMG/image-10.png)
 
 - Trong chương trình này ngoài khúc kiểm tra độ dài ra thì không thấy checker đâu, tìm một lúc thì thấy gọi `pipe`, thứ dùng để truyền dữ liệu giữa các tiến trình độc lập.
 
-![alt text](image-9.png)
+![alt text](_IMG/image-9.png)
 
-- Vậy là mình xác định được hướng đi của bài này, khả năng bài sẽ gen ra 1 chương trình checker và nhận input của `KMACTF.exe`
+- Mình xác định được hướng đi của bài này, khả năng bài sẽ gen ra 1 chương trình checker và nhận input của `KMACTF.exe` rồi xử lý và trả lại `correct/incorrect` thông qua `pipe`. Vậy ta cần phải tìm được path của file `check` giấu trong chall gốc và phân tích nó.
+
+- Tìm kiếm một lúc và thấy `checker2.exe`.
+
+![alt text](_IMG/image-11.png)
+
+- Nhảy tới path `C:\Users\ADMINZ\AppData\Local\Temp\`, thực hiện phân tích checker.
+
+![alt text](_IMG/image-12.png)
+
+- Trông có vẻ đúng là thứ mình cần tìm rồi.
+
+![alt text](_IMG/image-13.png)
+
+- Thực hiện debug động `checker2`, một lưu ý rằng để `checker2` mình debug nhận được thông tin mà `KMACTF.exe` gửi vào `pipe`, mình sẽ phải kill tiến trình `checker2` được khởi chạy trước đó.
+
+- Tiếp đến là về nội dung của `checker`.
+
+![alt text](_IMG/image-15.png)
+
+- Checker gồm 2 phần mã hóa, trước tiên mã hóa input thành `base64` và biến đổi từng kí tự một theo các case tương ứng của mảng `VM`.
+
+![alt text](_IMG/image-16.png)
+
+- Cuối cùng là kiểm tra với dải 64 phần tử và trả về `Correct/Incorrect`.
+
+![alt text](_IMG/image-17.png)
+
+- Về cơ bản thì code mã giả gen cho khá đẹp nên ta hoàn toàn có thể chép hết sang để viết script, nhưng có 1 thứ mình không để ý làm mất khá nhiều thời gian tìm lỗi là đây. Nội dung của `case 0xC0000096`, nếu ai chưa biết thì lệnh `movsx` sẽ khác `mov` 1 chút khi các biến của ta để ở dạng `signed`.
+  - `MOV`: chỉ sao chép dữ liệu mà không thay đổi giá trị.
+  - `MOVSX`: sao chép dữ liệu và mở rộng dấu của giá trị nguồn trước khi sao chép vào đích.
+
+![alt text](_IMG/image-18.png)
+
+- Điều này sẽ không ảnh hưởng nếu ta tính toán trên các thanh ghi có độ lớn bằng nhau, nhưng trong bài này thì khác. `Sus[cnt]` được chuyển từ dạng byte vào thanh ghi 4 byte `eax`, vậy khi giá trị của `Sus[cnt]` có bit đầu bằng 1, nó sẽ tự động thêm vào `0xffffff` để giữ tính chất.
+
+- Vậy là giải quyết xong vấn đề tính toán, vậy làm sao để tính ra flag đây? Đầu tiên mình thử `z3` nhưng quá nhiều phép toán bit xen vào nên chuyển qua brute.
+
+- Lý do để brute thì mình đã nói ở trên, chương trình biến đổi lần lượt từng giá trị của các phần tử một cách độc lập nên độ phức tạp không lớn. Thêm vào đó, bỏ qua bước `base64`, thứ ta brute không phải flag mà là chuỗi `base64` trước khi bị biến đổi. `base64` ở đây là một chuỗi 64 kí tự, khi biến đổi thì thành giá trị trong mảng `checker[]` tức là trong các phần tử hợp lệ cấu thành chuỗi `base64` sẽ có ít nhất 1 kí tự trả ra giá trị tương ứng.
+
+- `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=`
+
+- Dưới đây là script vét của mình.
 
 ```python
 Checker = [0x72, 0xBB, 0xB2, 0xCD, 0x58, 0xB2, 0x81, 0x0E, 0xA4, 0xB1,
@@ -200,6 +242,78 @@ for r in vm:
             cnt -= 1
 ```
 
+- Kết quả trả ra có 7 cặp có 2 giá trị thỏa mãn -> 128 mã `base64`.
+
+```
+ans:
+0: S
+1: 0
+2: 1
+3: B
+4: Q
+5: 1
+6: R
+7: G
+8: e
+9: 2
+10: h
+11: v
+12: d
+13: 1
+14: 9
+15: t
+16: Y
+17: W v
+18: 5
+19: 5
+20: X
+21: 3
+22: R
+23: p
+24: b
+25: W v
+26: V
+27: z
+28: X
+29: 2
+30: F
+31: y
+32: Z
+33: V
+34: 9
+35: 5
+36: b
+37: 3
+38: V
+39: f
+40: Z
+41: G
+42: c l
+43: c l
+44: Z
+45: F
+46: 9
+47: 0
+48: b
+49: 2
+50: R
+51: h
+52: e
+53: T
+54: 9
+55: o
+56: d
+57: W v
+58: g
+59: /
+60: f
+61: Q
+62: O =
+63: O =
+```
+
+- Script tạo tổ hợp và decode `base64`.
+
 ```python
 from itertools import product
 import base64
@@ -231,6 +345,8 @@ for i in ans:
     except ValueError as e:
         print(e)
 ```
+
+![alt text](_IMG/image-19.png)
 
 ```rust
 flag: KMACTF{how_many_times_are_you_died_today?huh?}
