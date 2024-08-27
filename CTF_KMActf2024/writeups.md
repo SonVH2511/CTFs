@@ -352,6 +352,14 @@ for i in ans:
 flag: KMACTF{how_many_times_are_you_died_today?huh?}
 ```
 
+#### Note
+
+![alt text](_IMG/image-100.png)
+
+- Thực ra bên chall gốc còn có 1 điều kiện để lọc 1 vài kí tự ra nữa nên sẽ chỉ còn 1 cái `base64` hợp lệ chứ không phải 128 case như solution của mình, nhưng xóa đi viết lại thì phí script trên quá nên thôi mình note đây vậy :v.
+
+  ![alt text](_IMG/image-1000.png)
+
 ## Mong WRITEUP này giúp ích cho các bạn!
 
 ```
