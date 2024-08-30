@@ -824,7 +824,7 @@ for i in dec:
     print(chr(i), end="")
 ```
 
-```ru
+```
 flag: KCSC{833N_5p3nD1N'_m057_7H31r_L1v35_l1v1n'_1n_7H3_G4ng574'5_p4R4d123}
 ```
 
