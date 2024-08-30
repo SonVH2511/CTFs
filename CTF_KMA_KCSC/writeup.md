@@ -688,7 +688,7 @@ print(flag)
 
 ![alt text](_IMG/image-18.png)
 
-```
+```rust
 flag: KMA{e81eabf0-db79-463d-b227-ea47dcf6cac6}
 ```
 
@@ -824,13 +824,13 @@ for i in dec:
     print(chr(i), end="")
 ```
 
-```
+```rust
 flag: KCSC{833N_5p3nD1N'_m057_7H31r_L1v35_l1v1n'_1n_7H3_G4ng574'5_p4R4d123}
 ```
 
 ## Mong WRITEUP này giúp ích cho các bạn!
 
-```
+```rust
 from KMA
 Author: 13r_ə_Rɪst
 ```
