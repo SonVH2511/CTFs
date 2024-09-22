@@ -1,0 +1,1 @@
+- Số lượng chữ `R` trong cụm từ `Dồng kĩ thuật số` là số lượng chall Rev của giải.
