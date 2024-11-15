@@ -528,7 +528,7 @@ flag: L3AK{R3venge_0f_Th3_Sch1ffy}
 
 ![alt text](_IMG/image-23.png)
 
-- Cụ thể thì hàm này thực hiện `cmp rax` với một giá trị out range.
+- Có vẻ là anti tại đây.
 
 ![alt text](_IMG/image-24.png)
 
